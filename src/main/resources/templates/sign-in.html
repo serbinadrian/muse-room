@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <title>HOME</title>
+  <link rel="stylesheet" href="../static/style/root.css">
+  <link rel="stylesheet" href="../static/style/reset.css">
+  <link rel="stylesheet" href="../static/style/sign-in.css">
+  <link rel="stylesheet" href="../static/style/nav.css">
+  <link rel="stylesheet" href="../static/style/tooltip.css">
+</head>
+
+<body>
+  <nav>
+    <div class="content">
+      <div class="site-logo" data-tooltip="Главная" data-flow="bottom">
+        <div class="site-name">
+          <a href="/">MUSE<br>ROOM</a>
+        </div>
+        <div class="logo-img">
+          <svg width="43" height="43" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M21.5 0C9.64198 0 0 9.64198 0 21.5C0 33.358 9.64198 43 21.5 43C33.358 43 43 33.358 43 21.5C43 9.64198 33.358 0 21.5 0ZM20.1962 12.2281H33.0562C33.4885 12.2278 33.8943 12.4354 34.1468 12.786C34.3997 13.1364 34.4684 13.5872 34.3316 13.9972L30.0442 26.8641C30.013 26.9643 29.9701 27.0606 29.9161 27.1506C29.5901 29.1908 27.8105 30.7724 25.6845 30.7724C23.3303 30.7724 21.3929 28.8342 21.3929 26.4799C21.3929 24.1257 23.3302 22.1872 25.6845 22.1872C26.7271 22.1872 27.6873 22.569 28.4338 23.197L31.1928 14.9149H21.1653L17.1844 26.8636C17.1757 26.8888 17.1664 26.9137 17.1562 26.938C16.9244 29.0804 15.0905 30.7719 12.8907 30.7719C10.5365 30.7719 8.60031 28.8336 8.60031 26.4794C8.60031 24.1251 10.5365 22.1866 12.8907 22.1866C13.909 22.1866 14.8487 22.5504 15.5878 23.1524L18.922 13.1472C19.0111 12.8797 19.182 12.6466 19.4109 12.4817C19.6395 12.3167 19.9145 12.2276 20.1964 12.2276L20.1962 12.2281Z"
+              fill="white" />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div class="center-container">
+    <div class="auth-block">
+      <div class="login-block">
+        <div class="auth-navigation">
+          <a class="auth-navigation-item auth-sign-in active" href="/signin">
+            Вход
+          </a>
+          <a class="auth-navigation-item auth-sign-up" href="/signup">
+            Регистрация
+          </a>
+        </div>
+        <div class="auth-title">
+          Мы скучали!
+        </div>
+        <div class="auth-subtitle">
+          Войдите чтобы продолжить
+        </div>
+        <div class="auth-form-block">
+          <form method="post" action="/login" id="login-form">
+            <div th:if="${invalid_authentication}" class="auth-form-item errored" th:attr="data-tooltip=${invalid_authentication.message}" data-flow="right">
+              <label for="email-input">
+                <div class="label-name">Логин</div>
+                <span class="input-holder">
+                  <input type="email" placeholder="Ваш логин" id="email-input" name="username" th:value="${username}">
+                </span>
+              </label>
+              <div class="ERROR">
+                !
+              </div>
+            </div>
+            <div th:unless="${invalid_authentication}" class="auth-form-item">
+              <label for="email-input">
+                <div class="label-name">Логин</div>
+                <span class="input-holder">
+                  <input type="email" placeholder="Ваш логин" id="email-input" name="username" th:value="${username}">
+                </span>
+              </label>
+            </div>
+            <div th:if="${invalid_authentication}" class="auth-form-item errored" th:attr="data-tooltip=${invalid_authentication.message}" data-flow="right">
+              <label for="password-input">
+                <div class="label-name">Пароль</div>
+                <span class="input-holder">
+                  <input type="password" placeholder="Ваш пароль" id="password-input" name="password">
+                </span>
+              </label>
+              <div class="ERROR">
+                !
+              </div>
+            </div>
+            <div th:unless="${invalid_authentication}" class="auth-form-item">
+              <label for="password-input">
+                <div class="label-name">Пароль</div>
+                <span class="input-holder">
+                  <input type="password" placeholder="Ваш пароль" id="password-input" name="password">
+                </span>
+              </label>
+            </div>
+            <div class="auth-submit">
+              <button type="button" onclick="document.getElementById('login-form').submit()">Войти!</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="blank-bakground"></div>
+    </div>
+    <script th:if="${invalid_authentication}" src="/../static/script/sign-in/sign-in.js"></script>
+  </div>
+
+</body>
+
+</html>

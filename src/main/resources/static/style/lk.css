@@ -1,0 +1,245 @@
+body{
+  background: url("../images/back.png");
+  background-color: var(--auth-bakground-color);
+}
+
+main {
+  padding: 80px 0 0 0;
+}
+
+.page-title {
+  text-align: center;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 28px;
+  letter-spacing: 0.05em;
+  color: var(--main-font-color);
+  margin-bottom: 40px;
+}
+
+.page-user-block {
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+  flex-wrap: nowrap;
+  -ms-align-items: center;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.user-image {
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  line-height: 60px;
+  font-weight: 600;
+  font-size: 20px;
+  border-radius: 50%;
+  border-style: solid;
+  border-width: 1px;
+  margin-right: 20px;
+}
+
+.user-data-row>* {
+  display: inline-block;
+  color: var(--main-font-color);
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 28px;
+  letter-spacing: 0.05em;
+  margin-right: 55px;
+}
+
+.row-left-side {
+  width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row-right-side {
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.page-content-wrapper {
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+  -ms-align-items: center;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.page-content-title {
+  margin-right: 30px;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 28px;
+  letter-spacing: 0.05em;
+  color: var(--main-font-color);
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.page-content-title.active{
+  border-bottom: 1px solid var(--secondary-accent-color);
+}
+
+.page-content-title:hover{
+  cursor: pointer;
+  color: var(--secondary-accent-color);
+}
+
+.page-content-items-count {
+  position: absolute;
+  right: -15px;
+  top: -5px;
+  color: var(--main-font-color);
+  letter-spacing: 0.05em;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 23px;
+}
+
+.own-music-wrapper {
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.own-music {
+  margin: 10px;
+  width: 350px;
+  height: 69px;
+  padding: 18px 20px;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+  flex-wrap: nowrap;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid var(--main-color);
+  border-radius: 5px;
+  justify-content: space-between;
+}
+
+.own-music-info {
+  width: 100%;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+  -ms-align-items: center;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.own-music-icon {
+  width: 65px;
+  height: 65px;
+  flex-shrink: 0;
+  margin-right: 20px;
+}
+
+.own-music-text {
+  margin-right: auto;
+}
+
+.own-music-name {
+  margin-bottom: 10px;
+}
+
+.own-music-singer {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 14px;
+  letter-spacing: 0.07em;
+}
+
+.own-music-time {
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.07em;
+  color: var(--main-font-color);
+}
+
+.own-music:hover {
+  background: rgba(194, 194, 194, 0.75);
+}
+
+.own-music:hover .own-music-time {
+  display: none;
+}
+
+.own-music:hover .own-music-buttons {
+  display: block;
+}
+
+.own-music-buttons {
+  display: none;
+}
+
+.own-music-buttons-delete {
+  margin-bottom: 5px;
+}
+
+.own-music-buttons-delete:hover path,
+.own-music-buttons-edit:hover path {
+  fill: var(--secondary-accent-color);
+  transition: .3s;
+}
+
+.own-music-buttons-delete:hover,
+.own-music-buttons-edit:hover {
+  cursor: pointer;
+}
+
+.upload-new-music {
+  margin: 10px;
+  padding: 20px;
+  width: 350px;
+  height: 65px;
+  background: rgba(255, 255, 255, 0.17);
+  border: 1px solid var(--main-color);
+  border-radius: 5px;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+  flex-wrap: nowrap;
+  -ms-align-items: center;
+  align-items: center;
+}
+
+.upload-new-music:hover{
+  cursor: pointer;
+}
+
+.upload-new-music:hover > *{
+  color: var(--secondary-accent-color);
+  transition: .3s;
+}
+
+.upload-new-music:hover path {
+  fill: var(--secondary-accent-color);
+  transition: .3s;
+}
+
+.upload-new-music-icon {
+  width: 65px;
+  height: 65px;
+  margin-right: 30px;
+}
+
+.upload-new-music-icon path {
+  fill: var(--secondary-font-color);
+}
+
+.upload-new-music-text {
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: 0.07em;
+  color: var(--secondary-font-color);
+}

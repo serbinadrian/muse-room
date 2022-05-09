@@ -1,0 +1,16 @@
+:root{
+  --navbar-height: 80px;
+  --content-width: 90%;
+
+
+  --main-font-color: #FFFFFF;
+  --secondary-font-color: #2d2d2d;
+  --accent-color: #B05830;
+  --secondary-accent-color: #F67337;
+  --font:'Hanson', sans-serif;
+  --auth-bakground-color: #303030;
+    --body-background-color: #313131;
+    --main-color: rgba(255, 255, 255, 0.6);
+    --secondary-color: #52535A;
+    --alt-color: #7B7B7B;
+}

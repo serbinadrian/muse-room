@@ -1,0 +1,56 @@
+.success-message {
+  width: 444px;
+  height: 300px;
+  background: var(--main-font-color);
+  border-radius: 5px;
+  justify-content: center;
+  text-align: center;
+}
+
+.success-message-icon {
+  width: 135px;
+  height: 135px;
+  transform: translateY(-50%);
+  margin: 0 auto;
+  margin-bottom: -60px;
+}
+
+.success-message-title {
+  font-family: 'Raleway', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 35px;
+  line-height: 41px;
+  color: var(--secondary-font-color);
+  margin-bottom: 30px;
+}
+
+.success-message-body {
+  font-family: 'Raleway', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 27px;
+  color: var(--alt-color);
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.success-message-button {
+  width: 400px;
+  height: 50px;
+  background: var(--accent-color);
+  border-radius: 4px;
+  font-weight: 800;
+  font-size: 20px;
+  line-height: 45px;
+  color: var(--main-font-color);
+  transition: .3s;
+  margin: 0 auto;
+}
+
+.success-message-button:hover {
+  background: var(--secondary-accent-color);
+  cursor: pointer;
+  transition: .3s;
+}
