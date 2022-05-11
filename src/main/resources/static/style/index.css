@@ -206,7 +206,7 @@ main .content {
   justify-content: space-between;
   height: 82vh;
   width: 100%;
-  overflow: hidden;
+  overflow: auto;
 }
 
 .song {
@@ -271,7 +271,8 @@ main .content {
 .button-rent,
 .button-play,
 .button-buy,
-.button-pause
+.button-pause,
+.button-unavailable
  {
   margin: 0 5px;
 }
@@ -279,14 +280,16 @@ main .content {
 .button-rent:hover,
 .button-play:hover,
 .button-buy:hover,
-.button-pause:hover {
+.button-pause:hover,
+.button-unavailable {
   cursor: pointer;
 }
 
 .button-rent:hover path,
 .button-play:hover path,
 .button-buy:hover path,
-.button-pause:hover path {
+.button-pause:hover path,
+.button-unavailable:hover path {
   fill: var(--secondary-accent-color);
   transition: .3s;
 }

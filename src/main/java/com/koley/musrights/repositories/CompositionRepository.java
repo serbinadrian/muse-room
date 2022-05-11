@@ -3,7 +3,10 @@ package com.koley.musrights.repositories;
 import com.koley.musrights.domains.Composition;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CompositionRepoitory extends JpaRepository<Composition, Long> {
+import java.util.List;
+
+public interface CompositionRepository extends JpaRepository<Composition, Long> {
+    List<Composition> findAllByOwnerId(long id);
     void deleteAll();
     boolean existsByNameAndAuthor(String name, String author);
 }

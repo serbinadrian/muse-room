@@ -1,9 +1,15 @@
 package com.koley.musrights.controllers;
 
+import com.koley.musrights.datasets.UserAvatarColorsDataset;
+import com.koley.musrights.domains.Composition;
 import com.koley.musrights.domains.ErrorMessage;
 import com.koley.musrights.domains.User;
+import com.koley.musrights.domains.UserAvatar;
 import com.koley.musrights.misc.Role;
+import com.koley.musrights.repositories.CompositionRepository;
+import com.koley.musrights.repositories.UserAvatarsRepository;
 import com.koley.musrights.repositories.UserRepository;
+import com.koley.musrights.services.AdminService;
 import com.koley.musrights.services.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,7 +27,13 @@ public class UserController {
     @Autowired
     AuthenticationService authenticationService;
     @Autowired
+    AdminService adminService;
+    @Autowired
     UserRepository userRepository;
+    @Autowired
+    UserAvatarsRepository userAvatarsRepository;
+    @Autowired
+    CompositionRepository compositionRepository;
     User user = new User();
     boolean isSignedIn = false;
 
@@ -30,8 +42,13 @@ public class UserController {
         if (isSignedIn) {
             model.addAttribute("user", user);
         }
-
+        boolean isAdmin = userRepository.existsByName("admin");
+        if(!isAdmin){
+            adminService.createAdmin();
+        }
+        List<Composition> compositions = compositionRepository.findAll();
         model.addAttribute("isSignedIn", isSignedIn);
+        model.addAttribute("compositions", compositions);
 
         return "index";
     }
@@ -39,9 +56,18 @@ public class UserController {
     @GetMapping("/userpage/{username}")
     public String getUserpage(Model model, @PathVariable (value = "username") String username){
         if (isSignedIn && username.equals(user.getName())) {
+            if(username.equals("admin")){
+                user = userRepository.getByName("admin");
+            }
+            UserAvatar userAvatar = userAvatarsRepository.getByUserId(user.getId());
+            List<Composition> compositions = compositionRepository.findAllByOwnerId(user.getId());
+            int uploadedListSize = compositions.size();
+            model.addAttribute("ownMusic", compositions);
+            model.addAttribute("uploadedMusicCount", uploadedListSize);
             model.addAttribute("user", user);
             model.addAttribute("isSignedIn", isSignedIn);
             model.addAttribute("username", username);
+            model.addAttribute("userAvatar", userAvatar);
         }
         else{
             return "redirect:/signin";
@@ -76,10 +102,6 @@ public class UserController {
             return "redirect:/";
         } else {
             isSignedIn = false;
-            for (ErrorMessage error : errors) {
-                model.addAttribute(error.getType().getTemplateValue(), error);
-                error.print();
-            }
             model.addAttribute("username", username);
         }
         return "sign-in";
@@ -105,7 +127,12 @@ public class UserController {
             user.setEmail(email);
             user.setPassword(password);
             user.setRole(Role.USER);
+            UserAvatarColorsDataset colorsDataset = new UserAvatarColorsDataset();
+            int size = colorsDataset.size;
+            int index = (int)Math.floor(Math.random()*(size+1));
+            UserAvatar avatar = adminService.createUserAvatar(user, colorsDataset.userColors.get(index), colorsDataset.userSecondaryColors.get(index));
             userRepository.save(user);
+            userAvatarsRepository.save(avatar);
             isSignedIn = true;
             return "redirect:/";
         } else {

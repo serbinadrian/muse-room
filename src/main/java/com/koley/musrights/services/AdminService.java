@@ -9,7 +9,7 @@ import com.koley.musrights.domains.User;
 import com.koley.musrights.domains.UserAvatar;
 import com.koley.musrights.misc.ErrorType;
 import com.koley.musrights.misc.Role;
-import com.koley.musrights.repositories.CompositionRepoitory;
+import com.koley.musrights.repositories.CompositionRepository;
 import com.koley.musrights.repositories.UserAvatarsRepository;
 import com.koley.musrights.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,26 +17,26 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class AdminService {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    CompositionRepoitory compositionRepoitory;
+    CompositionRepository compositionRepository;
     @Autowired
     UserAvatarsRepository userAvatarsRepository;
 
     public void wipeData() {
         userRepository.deleteAll();
-        compositionRepoitory.deleteAll();
+        compositionRepository.deleteAll();
+        userAvatarsRepository.deleteAll();
         createAdmin();
     }
 
     public List<ErrorMessage> ValidateComposition(String name, String author) {
         List<ErrorMessage> errorMessages = new ArrayList<>();
-        if (compositionRepoitory.existsByNameAndAuthor(name, author)) {
+        if (compositionRepository.existsByNameAndAuthor(name, author)) {
             ErrorMessage errorMessage = new ErrorMessage("Ошибка! такая композиция уже существует", ErrorType.ALREADY_EXISTS);
             errorMessages.add(errorMessage);
         }
@@ -80,14 +80,14 @@ public class AdminService {
             String key = usernames.get(i);
             User user = createUser(key, userNamesDataset.usernames.get(key));
 
-            if(!userRepository.existsByName(user.getName())){
+            if (!userRepository.existsByName(user.getName())) {
                 userRepository.save(user);
+                User savedUser = userRepository.getByName(key);
+                UserAvatar userAvatar = createUserAvatar(savedUser,
+                        userAvatarColorsDataset.userColors.get(i),
+                        userAvatarColorsDataset.userSecondaryColors.get(i));
+                userAvatarsRepository.save(userAvatar);
             }
-            User savedUser = userRepository.getByName(key);
-            UserAvatar userAvatar = createUserAvatar(savedUser,
-                                                     userAvatarColorsDataset.userColors.get(i),
-                                                     userAvatarColorsDataset.userSecondaryColors.get(i));
-            userAvatarsRepository.save(userAvatar);
             size++;
         }
         System.out.println("Users created: " + size);
@@ -106,11 +106,11 @@ public class AdminService {
         int remainderMusicToUsersRatio = musicListSize % userListSize;
 
         int compositionNumber = 0;
-        for(String username : usernames){
+        for (String username : usernames) {
             User user = userRepository.getByName(username);
             compositionNumber = getCompositionNumber(musicDataset, integerMusicToUsersRatio, compositionNumber, user);
         }
-        if(remainderMusicToUsersRatio != 0){
+        if (remainderMusicToUsersRatio != 0) {
             User user = userRepository.getByName(usernames.get(0));
             compositionNumber = getCompositionNumber(musicDataset, remainderMusicToUsersRatio, compositionNumber, user);
         }
@@ -122,8 +122,8 @@ public class AdminService {
             Composition composition = musicDataset.compositions.get(compositionNumber);
             composition.setFake(true);
             composition.setOwnerId(user.getId());
-            if(!compositionRepoitory.existsByNameAndAuthor(composition.getName(), composition.getAuthor())){
-                compositionRepoitory.save(composition);
+            if (!compositionRepository.existsByNameAndAuthor(composition.getName(), composition.getAuthor())) {
+                compositionRepository.save(composition);
             }
             compositionNumber++;
         }
@@ -141,24 +141,34 @@ public class AdminService {
         return user;
     }
 
-    private UserAvatar createUserAvatar(User user, String primaryColor, String secondaryColor) {
+    public UserAvatar createUserAvatar(User user, String primaryColor, String secondaryColor) {
         UserAvatar userAvatar = new UserAvatar();
         userAvatar.setUserId(user.getId());
         userAvatar.setAppliedUserColor(primaryColor);
         userAvatar.setAppliedSecondaryUserColor(secondaryColor);
-        userAvatar.generateInitials(user.getFullName());
+        if (user.getRole().equals(Role.ADMIN)) {
+            userAvatar.setInitials("admin");
+        } else {
+            userAvatar.generateInitials(user.getFullName());
+        }
+
         return userAvatar;
     }
 
-    private void createAdmin() {
+    public void createAdmin() {
+        UserAvatarColorsDataset colors = new UserAvatarColorsDataset();
         User admin = new User();
         admin.setName("admin");
         admin.setFullName("Administrator User");
         admin.setEmail("admin@horeca.localhost");
         admin.setPassword("admin");
         admin.setRole(Role.ADMIN);
+
         if (!userRepository.existsByName(admin.getName())) {
             userRepository.save(admin);
+            admin = userRepository.getByName("admin");
+            UserAvatar adminAvatar = createUserAvatar(admin, colors.userColors.get(-1), colors.userSecondaryColors.get(-1));
+            userAvatarsRepository.save(adminAvatar);
         }
     }
 }

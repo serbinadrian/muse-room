@@ -17,6 +17,7 @@ public class Composition {
     String author;
     Date uploadDate;
     boolean isFake = false;
+    //todo duration, ?filename
 
     public Composition(String compositionName, String compositionAuthor, User user){
         this.setName(compositionName);
