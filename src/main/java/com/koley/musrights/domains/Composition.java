@@ -17,15 +17,20 @@ public class Composition {
     String author;
     Date uploadDate;
     boolean isFake = false;
-    //todo duration, ?filename
+
+    int durationInSeconds;
+
+    String formatedDuration;
+
+    String fileName;
 
     public Composition(String compositionName, String compositionAuthor, User user){
         this.setName(compositionName);
         this.setAuthor(compositionAuthor);
         this.setOwnerId(user.getId());
         this.setFake(true);
+
         Date date = new Date();
-        System.out.println("date is: " + date);
         this.setUploadDate(date);
     }
 
@@ -79,5 +84,29 @@ public class Composition {
 
     public void setFake(boolean fake) {
         isFake = fake;
+    }
+
+    public int getDurationInSeconds() {
+        return durationInSeconds;
+    }
+
+    public void setDurationInSeconds(int durationInSeconds) {
+        this.durationInSeconds = durationInSeconds;
+    }
+
+    public String getFormatedDuration() {
+        return formatedDuration;
+    }
+
+    public void setFormatedDuration(String formatedDuration) {
+        this.formatedDuration = formatedDuration;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }
