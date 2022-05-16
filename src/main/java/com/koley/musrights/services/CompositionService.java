@@ -82,6 +82,7 @@ public class CompositionService {
         return mp3File;
     }
 
+    //TODO 3) resolve music duration by service (composition duration = 90sec) 1:30 for frontend
     private static String getFormatedDuration(int duration) {
         int seconds = duration % 60;
         int minutes = duration / 60;
@@ -93,7 +94,17 @@ public class CompositionService {
     }
 
     //TODO 2) delete byId (and)-> delete file from disk
-    //TODO 3) resolve music duration by service (composition duration = 90sec) 1:30 for frontend
+    public void remove(long idOfComposition, User user) throws IOException {
+        Composition composition = repository.getById(idOfComposition);
+
+        String directories = "/music/" + user.getName() + "/";
+
+        Path pathToFile = Paths.get(directories + composition.getFileName() + ".mp3");
+
+        Files.deleteIfExists(pathToFile);
+        repository.delete(composition);
+    }
+
     //TODO 4) resolve music playing (input[range]) position
     //TODO 5) listen by "play" click (isFake = false) (!)Fake means if audio src file is present(!)
 }

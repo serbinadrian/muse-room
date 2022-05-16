@@ -4,6 +4,8 @@ import com.koley.musrights.services.CompositionService;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.NotSupportedException;
 import com.mpatric.mp3agic.UnsupportedTagException;
+import org.apache.tomcat.util.json.JSONParser;
+import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,8 +28,10 @@ public class CompositionController {
         return "Saved";
     }
 
-    @DeleteMapping("remove")
-    public String removeComposition() {
-        return "";
+    @DeleteMapping(value = "remove")
+    public String removeComposition(@RequestParam("id") long idOfComposition) throws IOException {
+        compositionService.remove(idOfComposition, userController.user);
+
+        return "Deleted";
     }
 }

@@ -249,14 +249,12 @@
                         </div>
                     </div>
                     <div class="song-progress">
-                        <input type="range" value="25">
+                        <input type="range" th:value="0" min="0" th:max="${composition.durationInSeconds}">
                     </div>
                     <div class="song-duration">
-                        <div class="song-time passed">
-                            1:28
+                        <div class="song-time passed" th:text="'00:00'">
                         </div>
-                        <div class="song-time left">
-                            -2:21
+                        <div class="song-time left" th:text="'-' + ${composition.formatedDuration}">
                         </div>
                     </div>
                 </div>
