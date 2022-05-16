@@ -5,10 +5,13 @@ import com.koley.musrights.domains.User;
 import com.koley.musrights.repositories.CompositionRepository;
 import com.mpatric.mp3agic.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,16 +26,19 @@ public class CompositionService {
 
     //TODO 1) upload by any user (ownerId - user.id)-> resolve file location on disk
 
-    public void save(MultipartFile file, User user) throws IOException, InvalidDataException, UnsupportedTagException, NotSupportedException {
+    public void save (
+            MultipartFile file,
+            User user
+    ) throws IOException, InvalidDataException, UnsupportedTagException, NotSupportedException {
         Mp3File mp3File = getMp3File(file);
         ID3v2 dataOfTrackByID3v2 = mp3File.getId3v2Tag();
         ID3v1 dataOfTrackByID3v1 = mp3File.getId3v1Tag();
 
-        String filename = UUID.randomUUID().toString();
         String directories = "/music/" + user.getName() + "/";
         String fileExtension = Objects.requireNonNull(file.getOriginalFilename()).split("\\.")[1];
+        String filepath = directories + UUID.randomUUID() + fileExtension;
 
-        Path pathToFile = Path.of(directories + '/' + filename + '.' + fileExtension);
+        Path pathToFile = Path.of(filepath);
 
         File compositionDir = new File(directories);
 
@@ -59,7 +65,7 @@ public class CompositionService {
         composition.setFake(false);
         composition.setDurationInSeconds((int) mp3File.getLengthInSeconds());
         composition.setFormatedDuration(getFormatedDuration(composition.getDurationInSeconds()));
-        composition.setFileName(filename);
+        composition.setFilePath(filepath);
 
         if (!compositionDir.exists()) {
             compositionDir.mkdirs();
@@ -70,7 +76,9 @@ public class CompositionService {
         repository.save(composition);
     }
 
-    private static Mp3File getMp3File(MultipartFile file) throws IOException, InvalidDataException, UnsupportedTagException {
+    private static Mp3File getMp3File(
+            MultipartFile file
+    ) throws IOException, InvalidDataException, UnsupportedTagException {
         Path filePath = Paths.get("tmp/", file.getOriginalFilename());
 
         file.transferTo(filePath);
@@ -97,14 +105,19 @@ public class CompositionService {
     public void remove(long idOfComposition, User user) throws IOException {
         Composition composition = repository.getById(idOfComposition);
 
-        String directories = "/music/" + user.getName() + "/";
-
-        Path pathToFile = Paths.get(directories + composition.getFileName() + ".mp3");
-
-        Files.deleteIfExists(pathToFile);
+        Files.deleteIfExists(Path.of(composition.getFilePath()));
         repository.delete(composition);
     }
 
     //TODO 4) resolve music playing (input[range]) position
     //TODO 5) listen by "play" click (isFake = false) (!)Fake means if audio src file is present(!)
+    public InputStreamResource getCompositionResource(
+            long idOfComposition
+    ) throws FileNotFoundException {
+        Composition composition = repository.getById(idOfComposition);
+
+        File compositionFile = new File(composition.getFilePath());
+
+        return new InputStreamResource(new FileInputStream(compositionFile));
+    }
 }

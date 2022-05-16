@@ -22,7 +22,7 @@ public class Composition {
 
     String formatedDuration;
 
-    String fileName;
+    String filePath;
 
     public Composition(String compositionName, String compositionAuthor, User user){
         this.setName(compositionName);
@@ -102,11 +102,11 @@ public class Composition {
         this.formatedDuration = formatedDuration;
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getFilePath() {
+        return filePath;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 }
