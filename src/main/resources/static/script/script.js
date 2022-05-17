@@ -67,6 +67,9 @@ window.onload = () => {
 
       if (currentValue >= duration) {
         clearInterval(currentInterval);
+        range.value = 0;
+        song.querySelector('.button-pause').classList.add('hide');
+        song.querySelector('.button-play').classList.remove('hide');
       }
     }, 1000);
   }
