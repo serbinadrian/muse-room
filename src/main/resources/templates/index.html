@@ -156,7 +156,7 @@
         <div class="main-block">
             <div class="music-container" id="music-container">
                 <!--single-music-->
-                <div class="song" th:each="composition : ${compositions}">
+                <div class="song" th:each="composition : ${compositions}" th:data-song="${composition.id}" th:data-duration="${composition.durationInSeconds}">
                     <div class="song-icon">
                         <svg width="65" height="65" viewBox="0 0 65 65" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -309,7 +309,7 @@
     </div>
 </div>
 
-<script th:if="${user }" src="script/script.js"></script>
+<script src="script/script.js"></script>
 </body>
 
 </html>
