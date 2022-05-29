@@ -8,7 +8,8 @@ public enum ErrorType {
     INVALID_PASSWORD("invalid_password"),
     ALREADY_EXISTS("already_exists"),
     INCOMPATIBLE_DATASETS_SIZES("incompatible_datasets_sizes"),
-    INCOMPATIBLE_MUSIC_NUMERATION("incompatible_music_numeration");
+    INCOMPATIBLE_MUSIC_NUMERATION("incompatible_music_numeration"),
+    ERROR_WHILE_CREATING_RENT_BASE("error_while_creating_rent_base");
     private final String templateValue;
     ErrorType(String templateValue)
     {

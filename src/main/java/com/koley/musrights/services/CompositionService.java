@@ -104,8 +104,9 @@ public class CompositionService {
     //TODO 2) delete byId (and)-> delete file from disk
     public void remove(long idOfComposition, User user) throws IOException {
         Composition composition = repository.getById(idOfComposition);
-
-        Files.deleteIfExists(Path.of(composition.getFilePath()));
+        if(!composition.isFake()){
+            Files.deleteIfExists(Path.of(composition.getFilePath()));
+        }
         repository.delete(composition);
     }
 

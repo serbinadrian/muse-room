@@ -67,6 +67,9 @@ window.onload = () => {
 
       if (currentValue >= duration) {
         clearInterval(currentInterval);
+        range.value = 0;
+        song.querySelector('.button-pause').classList.add('hide');
+        song.querySelector('.button-play').classList.remove('hide');
       }
     }, 1000);
   }
@@ -160,16 +163,30 @@ window.onload = () => {
 
   allRangeInputs.forEach(input => {
     input.addEventListener('input', (event) => {
-      const song = event.target.closest('.song');
+      const range = event.target;
+      const song = range.closest('.song');
+      const duration = song.dataset['duration'];
       const currentStopButton = song.querySelector('.button-pause');
       const currentPlayButton = song.querySelector('.button-play');
+      const songTimePassed = song.querySelector('.song-time.passed');
+      const songTimeLeft = song.querySelector('.song-time.left');
 
-      currentPlayButton.classList.add('hide');
-      currentStopButton.classList.remove('hide');
+      if (currentPlayButton.classList.contains('hide')) {
+        currentPlayButton.classList.add('hide');
+        currentStopButton.classList.remove('hide');
 
-      hideOthersStopButtons(currentStopButton)();
-      stopTrack(event);
-      playTrack(event);
+        hideOthersStopButtons(currentStopButton)();
+        stopTrack(event);
+        playTrack(event);
+      } else {
+        const currentValue = +range.value;
+        const left = duration - currentValue;
+        const formattedCurrent = formatNumber(currentValue);
+        const formattedLeft = '-' + formatNumber(left);
+
+        songTimePassed.innerText = formattedCurrent;
+        songTimeLeft.innerText = formattedLeft;
+      }
     })
   });
 }

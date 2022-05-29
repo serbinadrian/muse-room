@@ -59,6 +59,13 @@ public class AdminService {
             return errorMessages;
         }
 
+        hasErrors = saveRent();
+        if (hasErrors) {
+            ErrorMessage errorMessage = new ErrorMessage("Ошибка в накапливании   аренды", ErrorType.ERROR_WHILE_CREATING_RENT_BASE);
+            errorMessages.add(errorMessage);
+            return errorMessages;
+        }
+
         return errorMessages;
     }
 
@@ -117,6 +124,10 @@ public class AdminService {
         return compositionNumber != musicListSize;
     }
 
+    private boolean saveRent(){
+        return false;
+    }
+
     private int getCompositionNumber(MusicDataset musicDataset, int integerMusicToUsersRatio, int compositionNumber, User user) {
         for (int i = 0; i < integerMusicToUsersRatio; i++) {
             Composition composition = musicDataset.compositions.get(compositionNumber);
@@ -159,7 +170,7 @@ public class AdminService {
         UserAvatarColorsDataset colors = new UserAvatarColorsDataset();
         User admin = new User();
         admin.setName("admin");
-        admin.setFullName("Administrator User");
+        admin.setFullName("Admin");
         admin.setEmail("admin@horeca.localhost");
         admin.setPassword("admin");
         admin.setRole(Role.ADMIN);

@@ -16,6 +16,8 @@ public class Composition {
     String name;
     String author;
     Date uploadDate;
+
+    Genres genre;
     boolean isFake = false;
 
     int durationInSeconds;
@@ -23,6 +25,8 @@ public class Composition {
     String formatedDuration;
 
     String filePath;
+
+    boolean isAvailableToBuy = true;
 
     public Composition(String compositionName, String compositionAuthor, User user){
         this.setName(compositionName);
@@ -108,5 +112,21 @@ public class Composition {
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
+    }
+
+    public boolean isAvailableToBuy() {
+        return isAvailableToBuy;
+    }
+
+    public void setAvailableToBuy(boolean availableToBuy) {
+        isAvailableToBuy = availableToBuy;
+    }
+
+    public Genres getGenre() {
+        return genre;
+    }
+
+    public void setGenre(Genres genre) {
+        this.genre = genre;
     }
 }

@@ -4,65 +4,76 @@
 <head>
   <meta charset="utf-8">
   <title>HOME</title>
-  <link rel="stylesheet" href="../static/style/root.css">
-  <link rel="stylesheet" href="../static/style/reset.css">
-  <link rel="stylesheet" href="../static/style/lk.css">
-  <link rel="stylesheet" href="../static/style/nav.css">
-  <link rel="stylesheet" href="../static/style/tooltip.css">
+  <link rel="stylesheet" href="/static/style/root.css">
+  <link rel="stylesheet" href="/static/style/reset.css">
+  <link rel="stylesheet" href="/static/style/lk.css">
+  <link rel="stylesheet" href="/static/style/nav.css">
+  <link rel="stylesheet" href="/static/style/tooltip.css">
 </head>
 
 <body>
   <nav id="nav">
-    <div class="content">
-      <div class="site-logo" data-tooltip="Главная" data-flow="bottom">
-        <div class="site-name">
-          <a href="/">MUSE<br>ROOM</a>
-        </div>
-        <div class="logo-img">
-          <svg width="43" height="43" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M21.5 0C9.64198 0 0 9.64198 0 21.5C0 33.358 9.64198 43 21.5 43C33.358 43 43 33.358 43 21.5C43 9.64198 33.358 0 21.5 0ZM20.1962 12.2281H33.0562C33.4885 12.2278 33.8943 12.4354 34.1468 12.786C34.3997 13.1364 34.4684 13.5872 34.3316 13.9972L30.0442 26.8641C30.013 26.9643 29.9701 27.0606 29.9161 27.1506C29.5901 29.1908 27.8105 30.7724 25.6845 30.7724C23.3303 30.7724 21.3929 28.8342 21.3929 26.4799C21.3929 24.1257 23.3302 22.1872 25.6845 22.1872C26.7271 22.1872 27.6873 22.569 28.4338 23.197L31.1928 14.9149H21.1653L17.1844 26.8636C17.1757 26.8888 17.1664 26.9137 17.1562 26.938C16.9244 29.0804 15.0905 30.7719 12.8907 30.7719C10.5365 30.7719 8.60031 28.8336 8.60031 26.4794C8.60031 24.1251 10.5365 22.1866 12.8907 22.1866C13.909 22.1866 14.8487 22.5504 15.5878 23.1524L18.922 13.1472C19.0111 12.8797 19.182 12.6466 19.4109 12.4817C19.6395 12.3167 19.9145 12.2276 20.1964 12.2276L20.1962 12.2281Z"
-              fill="white" />
-          </svg>
-        </div>
+  <div class="content">
+    <div class="site-logo" data-tooltip="Главная" data-flow="bottom">
+      <div class="site-name">
+        <a href="/">MUSE<br>ROOM</a>
       </div>
-      <div class="user-block" data-tooltip="Личный кабинет" data-flow="bottom">
-        <a th:href="@{/userpage/{username}(username=${user.name})}">
-          <div class="user-block">
-            <div class="username" title="username">
-              <span th:text="${user.name}">username</span>
-            </div>
-            <div class="user-picture">
-              <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M20 0C8.96984 0 0 8.96984 0 20C0 31.0302 8.96984 40 20 40C31.0302 40 40 31.0302 40 20C40 8.96984 31.0302 0 20 0ZM20 2.66683C29.5889 2.66683 37.3333 10.4114 37.3333 20.0002C37.3333 23.2458 36.4486 26.2809 34.9028 28.8748C31.2411 24.7887 25.9131 22.2221 20.0004 22.2221C14.0806 22.2221 8.75675 24.7943 5.09802 28.8887C3.54857 26.2923 2.66746 23.2494 2.66746 19.9998C2.66746 10.411 10.4121 2.66651 20.0008 2.66651L20 2.66683ZM20 4.00024C15.3522 4.00024 11.5556 7.79675 11.5556 12.4447C11.5556 17.0926 15.3521 20.8891 20 20.8891C24.6479 20.8891 28.4444 17.0926 28.4444 12.4447C28.4444 7.79675 24.6479 4.00024 20 4.00024ZM20 6.66706C23.2068 6.66706 25.7779 9.2381 25.7779 12.4449C25.7779 15.6517 23.2068 18.2228 20 18.2228C16.7932 18.2228 14.2221 15.6517 14.2221 12.4449C14.2221 9.2381 16.7932 6.66706 20 6.66706ZM20 24.8893C25.3519 24.8893 30.1127 27.3202 33.2921 31.1253C30.115 34.9197 25.3484 37.3338 20 37.3338C14.6516 37.3338 9.88492 34.92 6.70794 31.1253C9.885 27.3161 14.6444 24.8893 20 24.8893Z"
+      <div class="logo-img">
+        <svg width="43" height="43" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+                  d="M21.5 0C9.64198 0 0 9.64198 0 21.5C0 33.358 9.64198 43 21.5 43C33.358 43 43 33.358 43 21.5C43 9.64198 33.358 0 21.5 0ZM20.1962 12.2281H33.0562C33.4885 12.2278 33.8943 12.4354 34.1468 12.786C34.3997 13.1364 34.4684 13.5872 34.3316 13.9972L30.0442 26.8641C30.013 26.9643 29.9701 27.0606 29.9161 27.1506C29.5901 29.1908 27.8105 30.7724 25.6845 30.7724C23.3303 30.7724 21.3929 28.8342 21.3929 26.4799C21.3929 24.1257 23.3302 22.1872 25.6845 22.1872C26.7271 22.1872 27.6873 22.569 28.4338 23.197L31.1928 14.9149H21.1653L17.1844 26.8636C17.1757 26.8888 17.1664 26.9137 17.1562 26.938C16.9244 29.0804 15.0905 30.7719 12.8907 30.7719C10.5365 30.7719 8.60031 28.8336 8.60031 26.4794C8.60031 24.1251 10.5365 22.1866 12.8907 22.1866C13.909 22.1866 14.8487 22.5504 15.5878 23.1524L18.922 13.1472C19.0111 12.8797 19.182 12.6466 19.4109 12.4817C19.6395 12.3167 19.9145 12.2276 20.1964 12.2276L20.1962 12.2281Z"
                   fill="white" />
-              </svg>
-            </div>
-          </div>
-        </a>
-        <div class="logout" data-tooltip="Выйти" data-flow="right">
-          <a href="/signout">
-            <svg width="35" height="28" viewBox="0 0 35 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M14.5382 27.9999C10.7058 28.0162 7.02289 26.5517 4.29705 23.9281C1.57178 21.3045 0.0265012 17.7359 0 14.0045C0.0368317 11.0742 1.00533 8.22734 2.77241 5.85484C4.53949 3.48235 7.01817 1.70158 9.8673 0.756785C12.7165 -0.187734 15.7967 -0.249696 18.6834 0.579669C21.5703 1.40903 24.1223 3.08888 25.9887 5.38815C26.2658 5.73151 26.3333 6.19275 26.1662 6.59783C25.9991 7.00313 25.6227 7.29081 25.1787 7.3525C24.7348 7.41417 24.2906 7.24058 24.0138 6.89722C22.493 4.99789 20.4012 3.60809 18.0299 2.92192C15.6587 2.23601 13.1268 2.28789 10.7874 3.07078C8.44805 3.85341 6.4181 5.32763 4.98111 7.28788C3.54412 9.24813 2.77144 11.5962 2.77144 14.0044C2.77144 16.4126 3.54404 18.7607 4.98111 20.7209C6.4181 22.6811 8.44805 24.1554 10.7874 24.938C13.1268 25.7209 15.6587 25.7728 18.0299 25.0868C20.4011 24.4007 22.493 23.0109 24.0138 21.1115C24.2202 20.8573 24.5224 20.6938 24.8534 20.6571C25.1843 20.6207 25.5163 20.7141 25.7764 20.9168C26.0356 21.1159 26.2039 21.4068 26.2435 21.726C26.2834 22.0455 26.1919 22.3669 25.9888 22.6206C24.6254 24.3051 22.8854 25.6649 20.9015 26.597C18.9173 27.5292 16.7411 28.0087 14.5382 27.9998L14.5382 27.9999Z" />
-              <path
-                d="M33.752 15.222H11.251C10.8042 15.222 10.3916 14.99 10.1683 14.6135C9.94511 14.237 9.94511 13.773 10.1683 13.3965C10.3916 13.02 10.8042 12.788 11.251 12.788H30.739L27.8638 10.0012C27.5469 9.69231 27.423 9.24247 27.5391 8.82084C27.6551 8.39897 27.9933 8.06971 28.4267 7.95671C28.8597 7.8437 29.3218 7.96431 29.6391 8.27291L34.6393 13.1408C34.8126 13.312 34.9303 13.5293 34.9769 13.7654C35.0235 14.0014 34.9976 14.2459 34.9019 14.4673C34.8081 14.6898 34.6488 14.88 34.444 15.0142C34.2394 15.1484 33.9984 15.2209 33.7517 15.222H33.752Z" />
-              <path
-                d="M28.7518 20.089C28.4194 20.0909 28.1002 19.9638 27.8642 19.7362C27.6275 19.5077 27.4944 19.1967 27.4944 18.872C27.4944 18.5474 27.6275 18.2364 27.8642 18.0079L30.7393 15.2211H11.2513C10.8045 15.2211 10.3919 14.9891 10.1686 14.6126C9.94541 14.2361 9.94541 13.7721 10.1686 13.3956C10.3919 13.0191 10.8045 12.7871 11.2513 12.7871H33.7523C33.9989 12.7882 34.24 12.8607 34.4445 12.9949C34.6494 13.1291 34.8087 13.3193 34.9024 13.5418C34.9981 13.7631 35.0241 14.0076 34.9775 14.2437C34.9309 14.4798 34.8131 14.6971 34.6399 14.8682L29.6396 19.7362C29.4036 19.9638 29.0844 20.0909 28.752 20.089L28.7518 20.089Z" />
-            </svg>
-          </a>
-        </div>
+        </svg>
       </div>
     </div>
-  </nav>
+    <div th:if="${isSignedIn}" class="user-block" data-tooltip="Личный кабинет" data-flow="bottom">
+      <a th:href="@{/userpage/{username}(username=${user.name})}">
+        <div class="user-block">
+          <div class="username" title="username">
+            <span th:text="${user.name}">username</span>
+          </div>
+          <div class="user-picture"
+               th:if="${user.fullName != 'Admin'}"
+               th:style="'background-color:'+${userAvatar.appliedSecondaryUserColor} +'; border-color: ' + ${userAvatar.appliedUserColor} +'; color: ' +${userAvatar.appliedUserColor}">
+            <span th:text="${userAvatar.initials}"></span>
+          </div>
+          <div class="user-picture admin"
+               th:unless="${user.fullName != 'Admin'}"
+               th:style=" 'background-color:'+${userAvatar.appliedSecondaryUserColor} +'; border-color: ' + ${userAvatar.appliedUserColor}">
+            <svg width="22" height="16" viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M14.7753 6.97186L10.9999 0L7.22448 6.97186L0 1.68529L2.98737 12.0603H19.0126L22 1.68529L14.7753 6.97186ZM2.98697 15.3H19.0122V13.3748H2.98697V15.3Z"
+                    th:attr="fill=${userAvatar.appliedUserColor}"></path>
+            </svg>
+          </div>
+        </div>
+      </a>
+      <div class="logout" data-tooltip="Выйти" data-flow="right">
+        <a href="/signout">
+          <svg width="35" height="28" viewBox="0 0 35 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                    d="M14.5382 27.9999C10.7058 28.0162 7.02289 26.5517 4.29705 23.9281C1.57178 21.3045 0.0265012 17.7359 0 14.0045C0.0368317 11.0742 1.00533 8.22734 2.77241 5.85484C4.53949 3.48235 7.01817 1.70158 9.8673 0.756785C12.7165 -0.187734 15.7967 -0.249696 18.6834 0.579669C21.5703 1.40903 24.1223 3.08888 25.9887 5.38815C26.2658 5.73151 26.3333 6.19275 26.1662 6.59783C25.9991 7.00313 25.6227 7.29081 25.1787 7.3525C24.7348 7.41417 24.2906 7.24058 24.0138 6.89722C22.493 4.99789 20.4012 3.60809 18.0299 2.92192C15.6587 2.23601 13.1268 2.28789 10.7874 3.07078C8.44805 3.85341 6.4181 5.32763 4.98111 7.28788C3.54412 9.24813 2.77144 11.5962 2.77144 14.0044C2.77144 16.4126 3.54404 18.7607 4.98111 20.7209C6.4181 22.6811 8.44805 24.1554 10.7874 24.938C13.1268 25.7209 15.6587 25.7728 18.0299 25.0868C20.4011 24.4007 22.493 23.0109 24.0138 21.1115C24.2202 20.8573 24.5224 20.6938 24.8534 20.6571C25.1843 20.6207 25.5163 20.7141 25.7764 20.9168C26.0356 21.1159 26.2039 21.4068 26.2435 21.726C26.2834 22.0455 26.1919 22.3669 25.9888 22.6206C24.6254 24.3051 22.8854 25.6649 20.9015 26.597C18.9173 27.5292 16.7411 28.0087 14.5382 27.9998L14.5382 27.9999Z"/>
+            <path
+                    d="M33.752 15.222H11.251C10.8042 15.222 10.3916 14.99 10.1683 14.6135C9.94511 14.237 9.94511 13.773 10.1683 13.3965C10.3916 13.02 10.8042 12.788 11.251 12.788H30.739L27.8638 10.0012C27.5469 9.69231 27.423 9.24247 27.5391 8.82084C27.6551 8.39897 27.9933 8.06971 28.4267 7.95671C28.8597 7.8437 29.3218 7.96431 29.6391 8.27291L34.6393 13.1408C34.8126 13.312 34.9303 13.5293 34.9769 13.7654C35.0235 14.0014 34.9976 14.2459 34.9019 14.4673C34.8081 14.6898 34.6488 14.88 34.444 15.0142C34.2394 15.1484 33.9984 15.2209 33.7517 15.222H33.752Z"/>
+            <path
+                    d="M28.7518 20.089C28.4194 20.0909 28.1002 19.9638 27.8642 19.7362C27.6275 19.5077 27.4944 19.1967 27.4944 18.872C27.4944 18.5474 27.6275 18.2364 27.8642 18.0079L30.7393 15.2211H11.2513C10.8045 15.2211 10.3919 14.9891 10.1686 14.6126C9.94541 14.2361 9.94541 13.7721 10.1686 13.3956C10.3919 13.0191 10.8045 12.7871 11.2513 12.7871H33.7523C33.9989 12.7882 34.24 12.8607 34.4445 12.9949C34.6494 13.1291 34.8087 13.3193 34.9024 13.5418C34.9981 13.7631 35.0241 14.0076 34.9775 14.2437C34.9309 14.4798 34.8131 14.6971 34.6399 14.8682L29.6396 19.7362C29.4036 19.9638 29.0844 20.0909 28.752 20.089L28.7518 20.089Z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+    <div th:unless="${isSignedIn}" class="user-block" data-tooltip="Войти" data-flow="bottom">
+      <div class="username">
+        <a href="/signin">Войти</a>
+      </div>
+    </div>
+  </div>
+</nav>
   <main>
     <div class="content">
       <div class="page-title">
         Личный кабинет администратора
       </div>
       <div class="page-user-block">
-        <div class="user-image" th:style=" 'background-color:'+${userAvatar.appliedSecondaryUserColor} +'; border-color: ' + ${userAvatar.appliedUserColor}">
+        <div class="user-image admin" th:style=" 'background-color:'+${userAvatar.appliedSecondaryUserColor} +'; border-color: ' + ${userAvatar.appliedUserColor}">
           <svg width="22" height="16" viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M14.7753 6.97186L10.9999 0L7.22448 6.97186L0 1.68529L2.98737 12.0603H19.0126L22 1.68529L14.7753 6.97186ZM2.98697 15.3H19.0122V13.3748H2.98697V15.3Z"
                   th:attr="fill=${userAvatar.appliedUserColor}"></path>
@@ -76,6 +87,42 @@
             </div>
           </div>
         </div>
+      </div>
+      <div class="admin-buttons">
+        <div class="admin-button">
+          <form action="/admin/wipedata" method="post" id="wipedata">
+            <div class="input-holder">
+              <input type="password" name="adminPassword" placeholder="admin password" value="">
+            </div>
+            <button type="button" onclick="document.getElementById('wipedata').submit()">wipedata</button>
+          </form>
+        </div>
+        <div class="admin-button">
+          <form action="/admin/fillDB" method="post" id="fillDatabase">
+            <div class="input-holder"></div>
+            <button type="button" onclick="document.getElementById('fillDatabase').submit()">fillDB</button>
+          </form>
+        </div>
+        <!--
+        <div class="admin-button">
+          <div class="input-holder">
+            <span th:text="${organizationsCount}" class="value-text"></span>
+          </div>
+          Организаций
+        </div>
+        <div class="admin-button">
+          <div class="input-holder">
+            <span th:text="${usersCount}" class="value-text"></span>
+          </div>
+          Пользователей
+        </div>
+        <div class="admin-button">
+          <div class="input-holder">
+            <span th:text="${ratingsCount}" class="value-text"></span>
+          </div>
+          Отзывов
+        </div>
+        -->
       </div>
       <div class="page-content-wrapper">
         <div class="page-content-title active">
@@ -97,19 +144,6 @@
           </div>
         </div>
       </div>
-
-      <div class="admin-button">
-        <form action="/admin/wipedata" method="post" id="wipedata">
-          <input type="password" name="adminPassword">
-          <button type="button" onclick="document.getElementById('wipedata').submit()">wipedata</button>
-        </form>
-      </div>
-      <div class="admin-button">
-        <form action="/admin/fillDB" method="post" id="fillDatabase">
-          <button type="button" onclick="document.getElementById('fillDatabase').submit()">fillDB</button>
-        </form>
-      </div>
-
 
       <div class="own-music-wrapper">
         <form class="load-composition">
@@ -174,8 +208,8 @@
     </div>
   </main>
 
-  <script src="/script/load-composition.js" type="module"></script>
-  <script src="/script/remove-composition.js" type="module"></script>
+  <script src="/static/script/load-composition.js" type="module"></script>
+  <script src="/static/script/remove-composition.js" type="module"></script>
 </body>
 
 </html>

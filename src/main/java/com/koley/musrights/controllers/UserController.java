@@ -1,16 +1,15 @@
 package com.koley.musrights.controllers;
 
 import com.koley.musrights.datasets.UserAvatarColorsDataset;
-import com.koley.musrights.domains.Composition;
-import com.koley.musrights.domains.ErrorMessage;
-import com.koley.musrights.domains.User;
-import com.koley.musrights.domains.UserAvatar;
+import com.koley.musrights.domains.*;
 import com.koley.musrights.misc.Role;
 import com.koley.musrights.repositories.CompositionRepository;
 import com.koley.musrights.repositories.UserAvatarsRepository;
 import com.koley.musrights.repositories.UserRepository;
 import com.koley.musrights.services.AdminService;
 import com.koley.musrights.services.AuthenticationService;
+import com.koley.musrights.services.PageService;
+import com.koley.musrights.services.SearchAndFiltersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +18,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 @Controller
@@ -34,21 +35,58 @@ public class UserController {
     UserAvatarsRepository userAvatarsRepository;
     @Autowired
     CompositionRepository compositionRepository;
+    @Autowired
+    PageService<Composition> compositionPageService;
+    @Autowired
+    SearchAndFiltersService searchAndFiltersService;
+    private final int compositionsPerPage = 12;
     User user = new User();
     boolean isSignedIn = false;
 
     @GetMapping("/")
-    public String getHome(Model model) {
+    public String getHomepage(){
+        return "redirect:/home/1";
+    }
+
+    @GetMapping("/home/{page}")
+    public String getHomeFiltered(@PathVariable(value = "page")int page,
+                                  @RequestParam(value = "search", required = false)String search,
+                                  @RequestParam(value = "sort", required = false)String sort,
+                                  @RequestParam(value = "filters", required = false) Genres[] filters,
+                                  Model model) {
         if (isSignedIn) {
             model.addAttribute("user", user);
+            user = userRepository.getByName(user.getName());//update admin id if refill DB
         }
         boolean isAdmin = userRepository.existsByName("admin");
         if(!isAdmin){
             adminService.createAdmin();
         }
-        List<Composition> compositions = compositionRepository.findAll();
+
+
+        if(!searchAndFiltersService.isSet() || page == 1 && searchAndFiltersService.isChanged(search, sort, filters)){
+            searchAndFiltersService.insertParams(search, sort, filters);
+            searchAndFiltersService.build();
+        }
+
+
+        List<Composition> compositions = searchAndFiltersService.getData();
+
+        compositionPageService.construct(compositions, compositionsPerPage);
+        Page<Composition> currentPage = compositionPageService.getPage(page);
         model.addAttribute("isSignedIn", isSignedIn);
-        model.addAttribute("compositions", compositions);
+
+        if(!currentPage.isSingle()) {
+            model.addAttribute("labels", currentPage.getLabels());
+        }
+        if(!currentPage.isNull()) {
+            model.addAttribute("compositions", currentPage.getElements());
+        }
+        model.addAttribute("genres",  new ArrayList<>(EnumSet.allOf(Genres.class)));
+        model.addAttribute("search", search);
+        model.addAttribute("sort", searchAndFiltersService.getSort());
+        model.addAttribute("filters", searchAndFiltersService.getFilters());
+        model.addAttribute("userAvatar", userAvatarsRepository.getByUserId(user.getId()));
 
         return "index";
     }
@@ -59,7 +97,6 @@ public class UserController {
             if(username.equals("admin")){
                 user = userRepository.getByName("admin");
             }
-            UserAvatar userAvatar = userAvatarsRepository.getByUserId(user.getId());
             List<Composition> compositions = compositionRepository.findAllByOwnerId(user.getId());
             int uploadedListSize = compositions.size();
             model.addAttribute("ownMusic", compositions);
@@ -67,7 +104,7 @@ public class UserController {
             model.addAttribute("user", user);
             model.addAttribute("isSignedIn", isSignedIn);
             model.addAttribute("username", username);
-            model.addAttribute("userAvatar", userAvatar);
+            model.addAttribute("userAvatar", userAvatarsRepository.getByUserId(user.getId()));
         }
         else{
             return "redirect:/signin";
