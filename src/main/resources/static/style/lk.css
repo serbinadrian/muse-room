@@ -109,14 +109,18 @@ main {
   font-size: 24px;
   line-height: 28px;
   letter-spacing: 0.05em;
-  margin-right: 55px;
+  margin-right: 15px;
 }
 
 .row-left-side {
-  width: 220px;
+  width: 205px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.row-left-side.admin{
+  width: 130px;
 }
 
 .row-right-side {

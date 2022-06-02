@@ -17,61 +17,98 @@
             <div class="blank-background-body">
             </div>
         </div>
-        <div class="login-block">
-            <div class="rent-title">
+        <div class="login-block" id="editTable">
+            <div class="rent-title" style="margin-bottom: 45px">
                 РЕДАКТИРОВАНИЕ
             </div>
             <div class="rent-input">
                 <div class="rent-form-block">
-                    <form th:action="@{/processEdit/{id}(id  =  ${composition.id})}" id="edit-form">
+                    <form th:action="@{/processEdit/{id}(id  =  ${composition.id})}" id="edit-form" method="post">
                         <div class="rent-form-item">
                             <label for="aaa">
                           <span class="input-holder">
-                            <input id="aaa" th:value="${composition.name}" name="songName">
+                            <input id="aaa" th:value="${composition.name}" name="songName" placeholder="Название">
                           </span>
                             </label>
                         </div>
                         <div class="rent-form-item">
                             <label for="bbb">
                           <span class="input-holder">
-                            <input id="bbb" th:value="${composition.author}" name="songAuthor">
+                            <input id="bbb" th:value="${composition.author}" name="songAuthor" placeholder="Исполнитель">
                           </span>
                             </label>
                         </div>
                         <div class="rent-form-item">
                             <label for="cr-input">
                               <span class="input-holder">
-                                <select id="cr-input" name="song genre">
-                                    <option th:value="${currentGenre}" selected><span th:text="${currentGenre.genre}"></span></option>
-                                    <option th:value="${genre}" th:each="genre : ${genres}"><span th:text="${genre.genre}"></span></option>
+                                <select id="cr-input" name="songGenre">
+                                    <option th:if="${currentGenre}" th:value="${currentGenre}" selected>
+                                        <span th:text="${currentGenre.genre}"></span>
+                                    </option>
+                                    <option th:unless="${currentGenre}" value="Жанр" selected disabled>
+                                        <span>Жанр</span>
+                                    </option>
+                                    <option th:value="${genre}" th:each="genre, state : ${genres}">
+                                        <span th:text="${genre.genre}"></span>
+                                    </option>
                                 </select>
                               </span>
                             </label>
                         </div>
-                        <div class="rent-form-item">
-                            <input th:if="${composition.isAvailableToBuy}"
-                                   type="checkbox"
-                                   name="sell"
-                                   th:value="${'true'}"
-                                   checked="checked"/>
-                            <input th:unless="${composition.isAvailableToBuy}"
-                                   type="checkbox"
-                                   name="sell"
-                                   th:value="${'false'}"/>
-                            <label for="cr-input">
-                              <span class="input-holder">
-                                Выставить  на площадку
-                              </span>
-                            </label>
+                        <div class="rent-submit">
+                            <button style="margin: 20px auto;  display: block" type="button" id="button-sell">
+                                Выставить на продажу
+                            </button>
                         </div>
                         <div class="rent-submit">
-                            <button type="button" onclick="document.getElementById('edit-form').submit()">Сохранить
+                            <button  style="margin: 0 auto; display: block" type="button" id="button-not-sell">
+                                Снять с продажи
+                            </button>
+                        </div>
+                        <input type="hidden" name="sell" id="sell" th:value="${composition.isAvailableToBuy}">
+                        <div class="reg-submit">
+                            <button style="margin-top: 35px" type="button" id="submitEdit" th:classappend="${passed} ? 'passed'  : ''"
+                                    onclick="document.getElementById('edit-form').submit()">Сохранить
                             </button>
                         </div>
                     </form>
                 </div>
             </div>
+            <script>
+                let editTable = document.getElementById('editTable');
+                let submitEdit = document.getElementById('submitEdit');
+                let sell = document.getElementById("sell");
+                let buttonSell =  document.getElementById("button-sell");
+                let buttonMotSell =  document.getElementById("button-not-sell");
 
+                if(submitEdit.classList.contains("passed")){
+                    editTable.classList.add("passed");
+                    editTable.addEventListener('click', () => {
+                        editTable.classList.remove("passed");
+                    });
+                }
+
+                if(sell.value === 'true'){
+                    buttonSell.classList.add('disabled');
+                    buttonMotSell.classList.remove('disabled');
+                }  else if(sell.value === 'false') {
+                    buttonMotSell.classList.add('disabled');
+                    buttonSell.classList.remove('disabled');
+                }
+
+                buttonSell.addEventListener('click', () => {
+                    buttonSell.classList.add('disabled');
+                    buttonMotSell.classList.remove('disabled');
+                    sell.value  = 'true';
+                });
+
+                buttonMotSell.addEventListener('click', () => {
+                    buttonMotSell.classList.add('disabled');
+                    buttonSell.classList.remove('disabled');
+                    sell.value  = 'false';
+                });
+
+            </script>
         </div>
     </div>
 </div>

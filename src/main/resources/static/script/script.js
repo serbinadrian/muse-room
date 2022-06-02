@@ -159,6 +159,8 @@ window.onload = () => {
     modal.classList.add('hide');
     nav.classList.remove('unfocused');
     main.classList.remove('unfocused');
+    window.location=window.location;
+
   })
 
   allRangeInputs.forEach(input => {

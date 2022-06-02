@@ -99,23 +99,22 @@ public class UserController {
     }
 
     @GetMapping("/stopRent/{id}")
-    public  String stopRent(@PathVariable(value = "id")long id,
-                            Model model){
+    public String stopRent(@PathVariable(value = "id") long id,
+                           Model model) {
 
-        UserRent crent =  rentRepository.getByUserIdAndCompositionId(user.getId(), id);
+        UserRent crent = rentRepository.getByUserIdAndCompositionId(user.getId(), id);
         rentRepository.deleteById(crent.getId());
         List<Composition> compositions = compositionRepository.findAllByOwnerId(user.getId());
         List<UserRent> rents = rentRepository.findAllByUserId(user.getId());
         List<Composition> ownCompositions = new ArrayList<>();
-        List<Composition> rentCompositions  = new ArrayList<>();
+        List<Composition> rentCompositions = new ArrayList<>();
         List<Composition> boughtCompositions = new ArrayList<>();
-        for(Composition composition : compositions){
-            if(composition.isFirstOwner()){
+        for (Composition composition : compositions) {
+            if (composition.isFirstOwner()) {
                 ownCompositions.add(composition);
-            }
-            else boughtCompositions.add(composition);
+            } else boughtCompositions.add(composition);
         }
-        for (UserRent rent : rents){
+        for (UserRent rent : rents) {
             Composition composition = compositionRepository.getById(rent.getCompositionId());
             rentCompositions.add(composition);
         }
@@ -136,25 +135,70 @@ public class UserController {
     }
 
     @GetMapping("/editComposition/{id}")
-    public  String getEditPage(@PathVariable(value = "id")long id,
-                               Model model){
+    public String getEditPage(@PathVariable(value = "id") long id,
+                              Model model) {
         Composition composition = compositionRepository.getById(id);
-        List<Genres>  genres = new ArrayList<>(EnumSet.allOf(Genres.class));
+        List<Genres> genres = new ArrayList<>(EnumSet.allOf(Genres.class));
         Genres currentGenre = null;
-        int index = 0;
-        for(Genres genre  : genres){
-            if(composition.getGenre().equals(genre)){
-                currentGenre = genres.get(index);
-                genres.remove(index);
-                break;
+
+        if (composition.getGenre() != null) {
+            int index = 0;
+            for (Genres genre : genres) {
+
+                if (composition.getGenre().equals(genre)) {
+                    currentGenre = genres.get(index);
+                    genres.remove(index);
+                    break;
+                }
+                index++;
             }
-            index++;
         }
-        model.addAttribute("composition",  composition);
+        model.addAttribute("composition", composition);
         model.addAttribute("genres", genres);
-        if(currentGenre !=  null){
+        if (currentGenre != null) {
             model.addAttribute("currentGenre", currentGenre);
         }
+        return "editComposition";
+    }
+
+    @PostMapping("/processEdit/{id}")
+    public String processEdit(@PathVariable(value = "id") long id,
+                              @RequestParam(value = "songName") String Nname,
+                              @RequestParam(value = "songAuthor") String Nauthor,
+                              @RequestParam(value = "songGenre", required = false) Genres Ngenre,
+                              @RequestParam(value = "sell") boolean sell,
+                              Model model) {
+
+        Composition composition = compositionRepository.getById(id);
+        composition.setAvailableToBuy(sell);
+        composition.setName(Nname);
+        composition.setAuthor(Nauthor);
+        if(Ngenre != null){
+            composition.setGenre(Ngenre);
+        }
+        compositionRepository.save(composition);
+
+        composition = compositionRepository.getById(id);
+        List<Genres> genres = new ArrayList<>(EnumSet.allOf(Genres.class));
+        Genres currentGenre = null;
+        if (composition.getGenre() != null) {
+            int index = 0;
+            for (Genres genre : genres) {
+
+                if (composition.getGenre().equals(genre)) {
+                    currentGenre = genres.get(index);
+                    genres.remove(index);
+                    break;
+                }
+                index++;
+            }
+        }
+        model.addAttribute("composition", composition);
+        model.addAttribute("genres", genres);
+        if (currentGenre != null) {
+            model.addAttribute("currentGenre", currentGenre);
+        }
+        model.addAttribute("passed", true);
         return "editComposition";
     }
 
@@ -167,15 +211,14 @@ public class UserController {
             List<Composition> compositions = compositionRepository.findAllByOwnerId(user.getId());
             List<UserRent> rents = rentRepository.findAllByUserId(user.getId());
             List<Composition> ownCompositions = new ArrayList<>();
-            List<Composition> rentCompositions  = new ArrayList<>();
+            List<Composition> rentCompositions = new ArrayList<>();
             List<Composition> boughtCompositions = new ArrayList<>();
-            for(Composition composition : compositions){
-                if(composition.isFirstOwner()){
+            for (Composition composition : compositions) {
+                if (composition.isFirstOwner()) {
                     ownCompositions.add(composition);
-                }
-                else boughtCompositions.add(composition);
+                } else boughtCompositions.add(composition);
             }
-            for (UserRent rent : rents){
+            for (UserRent rent : rents) {
                 Composition composition = compositionRepository.getById(rent.getCompositionId());
                 rentCompositions.add(composition);
             }
@@ -225,15 +268,14 @@ public class UserController {
                               Model model) {
 
         lcount = lcount.replace(",", "");
-        int count = Integer.parseInt(lcount.replace("прослушиваний",  "").trim());
+        int count = Integer.parseInt(lcount.replace("прослушиваний", "").trim());
 
         Composition composition = compositionRepository.getById(songID);
         UserRent rent;
-        if(rentRepository.existsByCompositionIdAndUserId(songID, user.getId())){
+        if (rentRepository.existsByCompositionIdAndUserId(songID, user.getId())) {
             rent = rentRepository.getByUserIdAndCompositionId(user.getId(), songID);
             rent.setListenCount(rent.getListenCount() + count);
-        }
-        else{
+        } else {
             rent = new UserRent();
             rent.setListenCount(count);
         }
@@ -261,26 +303,31 @@ public class UserController {
 
     @PostMapping("processBuy/{songID}")
     public String processBuy(@PathVariable(value = "songID") long songID,
-                              Model model) {
+                             Model model) {
         Composition composition = compositionRepository.getById(songID);
         UserBuying buying;
-        if(buyRepository.existsByCompositionId(composition.getId())){
+        if (buyRepository.existsByCompositionId(composition.getId())) {
             buying = buyRepository.getByCompositionId(composition.getId());
             buying.setBuyingDate(new Date());
             buying.setUserId(user.getId());
-        }else {
-            buying =  new UserBuying();
+        } else {
+            buying = new UserBuying();
             buying.setBuyingDate(new Date());
             buying.setUserId(user.getId());
             buying.setCompositionId(composition.getId());
         }
+        if (rentRepository.existsByCompositionIdAndUserId(songID, user.getId())) {
+            UserRent rent = rentRepository.getByUserIdAndCompositionId(user.getId(), songID);
+            rentRepository.deleteById(rent.getId());
+        }
         composition.setOwnerId(user.getId());
+        composition.setFirstOwner(false);
         composition.setAvailableToBuy(false);
         composition.setBuyTimes(composition.getBuyTimes() + 1);
         compositionRepository.save(composition);
         buyRepository.save(buying);
 
-        BuyingHistoryLine  buyingHistoryLine = new BuyingHistoryLine();
+        BuyingHistoryLine buyingHistoryLine = new BuyingHistoryLine();
         buyingHistoryLine.setUserId(buying.getUserId());
         buyingHistoryLine.setCompositionId(buying.getCompositionId());
         buyingHistoryLine.setLineDate(buying.getBuyingDate());
@@ -349,10 +396,11 @@ public class UserController {
             user.setPassword(password);
             user.setRole(Role.USER);
             UserAvatarColorsDataset colorsDataset = new UserAvatarColorsDataset();
+            userRepository.save(user);
+            user = userRepository.getByName(username);
             int size = colorsDataset.size;
             int index = (int) Math.floor(Math.random() * (size + 1));
             UserAvatar avatar = adminService.createUserAvatar(user, colorsDataset.userColors.get(index), colorsDataset.userSecondaryColors.get(index));
-            userRepository.save(user);
             userAvatarsRepository.save(avatar);
             isSignedIn = true;
             return "redirect:/";

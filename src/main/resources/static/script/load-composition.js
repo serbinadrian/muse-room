@@ -16,7 +16,8 @@ window.addEventListener('DOMContentLoaded', () => {
                 body: formData
             });
 
-            location.reload();
+            window.location=window.location;
+
         }
     });
 });

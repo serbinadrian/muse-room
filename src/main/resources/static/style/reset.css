@@ -4,7 +4,7 @@
   font-family: var(--font);
 }
 
-html, body, main, label, img, svg, input,  form, iframe, .center-container{
+html, body, main, label, img, svg, input,  form, iframe, select, .center-container{
   width: 100%;
   height: 100%;
 }
@@ -126,5 +126,21 @@ a.page-number{
 
 .arrow.no-click path {
   fill: var(--alt-color);
+}
+
+@media (max-width: 1800px) {
+  main .content{
+    margin-top: 60px !important;
+  }
+  .content {
+    scale: 0.9 !important;
+  }
+  .music-container{
+    height: 87vh !important;
+  }
+
+  .auth-block{
+    scale: .78 !important;
+  }
 }
 

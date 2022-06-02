@@ -111,9 +111,10 @@ public class SearchAndFiltersService {
             filters.add(i, 0);
         }
         if (size != 0) {
-            for (int i = 0; i < size; i++) {
-                if (genres.contains(this.filters.get(i))) {
-                        filters.set(i, 1);
+            for (Genres filter : this.filters) {
+                if (genres.contains(filter)) {
+                    int index = genres.indexOf(filter);
+                    filters.set(index, 1);
                 }
             }
         }

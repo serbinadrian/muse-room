@@ -35,6 +35,7 @@ main .content {
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAIQSURBVHgBtVXLccIwEF2bz9klODeGAeJ0YCpIUgFQQZIKgAqSdAAVABUAFcQHhuEWdRDuDJC3Zj0YZAWDnTcjWMnSvl1pPxYZUKvVfMuyWhj+fr93o3XMA8yDzWbTX61WilLAMijvQvTpMgZpyE5IGo3GC6z8kOka8hCEMygKeMG2badQKLgQnzBask9hX2exWMwukoCgi809mY6hrBMEwdp00PM8d7vdTiG6PIf8sFwuAyNJpVJxS6XSN8sg6sOqHqVEvV4f0MGrNQy7SzLM5h8QTGU+uIaAAcWvHAwQHXjznrTH5ocmcRkH+nQl2PLdbvcm0zau0dFIOExFHuCAohsgj86DECRtjQRv4Ik8oQyAN+F5ROC9RgJPQhLcp6IMgHLF/zGjj98iAR9/KANwPowqGK2/CcaackCkHGRKI4kWsalJGQA9vuhRGgnGnAWEb4syAMofRZwnkYxF9jnz6QYg69t0yDUFY8caSTzGy+XyKCmZ/oIYxlWbr2xoLCtcDOlQdT0uDWmJpOZFRVKZSlJIwpkOgmdZa4PoS8qNEfw9RhD3SsNJP6lWqx68GsUOzvCgE2RzWMIh8/q9dMso6ZT88zeFstI8b2JaZ5Q+0aNjUzKBr/ezWCxyk3NivUUjskwahIwt5tB02AvOau7vKCFzjqL4I581sRMii3KEiShXEhNR7iRJRP9CEifi2vgLwzcuOsOcxnkAAAAASUVORK5CYII=");
   background-position: 97%;
   background-repeat: no-repeat;
+  box-shadow: 0 0 10px var(--secondary-font-color);
 }
 
 .search-block input:focus {
@@ -79,6 +80,11 @@ main .content {
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+.option input{
+  width: 5px;
+  height: 5px;
 }
 
 .option {
@@ -180,6 +186,7 @@ main .content {
 
 .filters-block button {
   letter-spacing: 0.05em;
+  box-shadow: 0 0 10px var(--secondary-font-color);
   color: var(--secondary-font-color);
   font-weight: 500;
   font-size: 22px;
@@ -208,7 +215,6 @@ main .content {
   display: -ms-flex;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
   height: 82vh;
   width: 100%;
   overflow: auto;
@@ -224,7 +230,8 @@ main .content {
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin-bottom: 20px;
+  margin: 0 auto 10px;
+  box-shadow: 0 0 10px var(--secondary-font-color);
 }
 
 .song-icon {
@@ -419,13 +426,15 @@ input[type=range]:focus::-ms-fill-upper {
   height: 30px;
   background: var(--main-color);
   border-radius: 5px;
-  padding: 15px 300px;
+  padding: 15px;
+  margin: 0 auto;
   display: -webkit-flex;
   display: -ms-flex;
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
+  box-shadow: 0 0 10px var(--secondary-font-color);
 }
 
 .arrow {
@@ -477,7 +486,6 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 body{
-  background: url("../images/background.png") !important;
-  background-size: cover;
-  background-repeat: no-repeat;
+  background-size: cover !important;
+  background: url("../images/background.png") no-repeat;
 }

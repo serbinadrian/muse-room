@@ -209,14 +209,20 @@
 }
 
 .input-holder input,
-.input-holder output {
+.input-holder output,
+.input-holder select{
   font-size: 18px;
   color: var(--main-font-color);
   letter-spacing: 0.05em;
 }
 
+.input-holder select  option{
+  background: #7B7B7B;
+}
+
 .input-holder input, .input-holder input:focus,
-.input-holder output, .input-holder output:focus {
+.input-holder output, .input-holder output:focus,
+.input-holder select, .input-holder select:focus{
   border: none;
   outline: none;
   background: transparent;
@@ -243,8 +249,17 @@
   margin-top: 195px;
 }
 
-.reg-submit button {
+.passed{
+  border: 2px solid limegreen;
+}
+
+.rent-submit button {
   width: 270px;
+}
+
+.rent-submit button.disabled{
+  background: #3a3a3a;
+  pointer-events: none;
 }
 
 .rent-submit button:hover,
