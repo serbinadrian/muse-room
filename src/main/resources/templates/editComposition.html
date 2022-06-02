@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>HOME</title>
+    <link rel="stylesheet" href="/static/style/root.css">
+    <link rel="stylesheet" href="/static/style/reset.css">
+    <link rel="stylesheet" href="/static/style/rent.css">
+    <link rel="stylesheet" href="/static/style/tooltip.css">
+</head>
+
+<body>
+<div class="center-container">
+    <div class="rent-block">
+        <div class="blank-bakground">
+            <div class="blank-background-body">
+            </div>
+        </div>
+        <div class="login-block">
+            <div class="rent-title">
+                РЕДАКТИРОВАНИЕ
+            </div>
+            <div class="rent-input">
+                <div class="rent-form-block">
+                    <form th:action="@{/processEdit/{id}(id  =  ${composition.id})}" id="edit-form">
+                        <div class="rent-form-item">
+                            <label for="aaa">
+                          <span class="input-holder">
+                            <input id="aaa" th:value="${composition.name}" name="songName">
+                          </span>
+                            </label>
+                        </div>
+                        <div class="rent-form-item">
+                            <label for="bbb">
+                          <span class="input-holder">
+                            <input id="bbb" th:value="${composition.author}" name="songAuthor">
+                          </span>
+                            </label>
+                        </div>
+                        <div class="rent-form-item">
+                            <label for="cr-input">
+                              <span class="input-holder">
+                                <select id="cr-input" name="song genre">
+                                    <option th:value="${currentGenre}" selected><span th:text="${currentGenre.genre}"></span></option>
+                                    <option th:value="${genre}" th:each="genre : ${genres}"><span th:text="${genre.genre}"></span></option>
+                                </select>
+                              </span>
+                            </label>
+                        </div>
+                        <div class="rent-form-item">
+                            <input th:if="${composition.isAvailableToBuy}"
+                                   type="checkbox"
+                                   name="sell"
+                                   th:value="${'true'}"
+                                   checked="checked"/>
+                            <input th:unless="${composition.isAvailableToBuy}"
+                                   type="checkbox"
+                                   name="sell"
+                                   th:value="${'false'}"/>
+                            <label for="cr-input">
+                              <span class="input-holder">
+                                Выставить  на площадку
+                              </span>
+                            </label>
+                        </div>
+                        <div class="rent-submit">
+                            <button type="button" onclick="document.getElementById('edit-form').submit()">Сохранить
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

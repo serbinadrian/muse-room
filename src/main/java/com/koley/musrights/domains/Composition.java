@@ -19,6 +19,7 @@ public class Composition {
 
     Genres genre;
     boolean isFake = false;
+    boolean isFirstOwner = false;
 
     int durationInSeconds;
 
@@ -27,6 +28,9 @@ public class Composition {
     String filePath;
 
     boolean isAvailableToBuy = true;
+
+    int rentTimes;
+    int  buyTimes;
 
     public Composition(String compositionName, String compositionAuthor, User user){
         this.setName(compositionName);
@@ -128,5 +132,29 @@ public class Composition {
 
     public void setGenre(Genres genre) {
         this.genre = genre;
+    }
+
+    public int getRentTimes() {
+        return rentTimes;
+    }
+
+    public void setRentTimes(int rentTimes) {
+        this.rentTimes = rentTimes;
+    }
+
+    public int getBuyTimes() {
+        return buyTimes;
+    }
+
+    public void setBuyTimes(int buyTimes) {
+        this.buyTimes = buyTimes;
+    }
+
+    public boolean isFirstOwner() {
+        return isFirstOwner;
+    }
+
+    public void setFirstOwner(boolean firstOwner) {
+        isFirstOwner = firstOwner;
     }
 }

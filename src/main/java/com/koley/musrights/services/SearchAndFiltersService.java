@@ -2,6 +2,7 @@ package com.koley.musrights.services;
 
 import com.koley.musrights.domains.Composition;
 import com.koley.musrights.domains.Genres;
+import com.koley.musrights.domains.User;
 import com.koley.musrights.repositories.CompositionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -17,6 +18,7 @@ public class SearchAndFiltersService {
     String search;
     String sort;
     List<Genres> filters;
+    User user;
     boolean newParamValue = false;
     boolean isSet = false;
 
@@ -24,7 +26,7 @@ public class SearchAndFiltersService {
         return data;
     }
 
-    public void insertParams(String search, String sort, Genres[] filters) {
+    public void insertParams(User user, String search, String sort, Genres[] filters) {
 
         System.out.println("search query: " + search);
         System.out.println("sort query: " + sort);
@@ -37,11 +39,11 @@ public class SearchAndFiltersService {
         } else {
             this.filters = new ArrayList<>();
         }
-
+        this.user =  user;
         this.newParamValue = true;
     }
 
-    public boolean isChanged(String search, String sort, Genres[] filters) {
+    public boolean isChanged(String search, String sort, Genres[] filters, User user) {
         String currentSearch = Objects.requireNonNullElse(search, "");
         String currentSort = Objects.requireNonNullElse(sort, "sortRateDesc");
         List<Genres> currentFilters = new ArrayList<>();
@@ -49,7 +51,7 @@ public class SearchAndFiltersService {
             currentFilters = new ArrayList<>(List.of(filters));
         }
 
-        return !Objects.equals(this.search, currentSearch) || !Objects.equals(this.sort, currentSort) || this.filters != currentFilters;
+        return !Objects.equals(this.search, currentSearch) || !Objects.equals(this.sort, currentSort) || this.filters != currentFilters || !Objects.equals(this.user, user);
     }
 
     public void build() {
@@ -69,12 +71,16 @@ public class SearchAndFiltersService {
                         composition.getAuthor().toLowerCase().contains(this.search.toLowerCase());
                 boolean filterPassed = calculateFilterPassed(composition);
 
-                if (searchPassed && filterPassed) {
+                if (searchPassed && filterPassed && composition.isAvailableToBuy()) {
                     this.data.add(composition);
                 }
             }
         } else {
-            this.data = data;
+            for (Composition composition : data) {
+                if (composition.isAvailableToBuy()) {
+                    this.data.add(composition);
+                }
+            }
         }
         this.isSet = true;
     }
@@ -102,7 +108,7 @@ public class SearchAndFiltersService {
         int size = this.filters.size();
         int globalGenresSize = genres.size();
         for (int i = 0; i < globalGenresSize; i++) {
-            filters.add(0);
+            filters.add(i, 0);
         }
         if (size != 0) {
             for (int i = 0; i < size; i++) {

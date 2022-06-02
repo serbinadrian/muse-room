@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>HOME</title>
+  <link rel="stylesheet" href="/static/style/root.css">
+  <link rel="stylesheet" href="/static/style/reset.css">
+  <link rel="stylesheet" href="/static/style/rent.css">
+  <link rel="stylesheet" href="/static/style/tooltip.css">
+</head>
+
+<body>
+  <div class="center-container">
+    <div class="rent-block">
+      <div class="blank-bakground">
+        <div class="blank-background-body">
+          <div class="rent-navigation">
+            <a class="rent-navigation-item rent-sign-in" th:href="@{/rent/{songID}(songID = ${composition.id})}">
+              АРЕНДА
+            </a>
+            <a class="rent-navigation-item rent-sign-up active" th:href="@{/buy/{songID}(songID = ${composition.id})}">
+              ПОКУПКА
+            </a>
+          </div>
+          <div class="song-data-block">
+            <div class="song-data-label">
+              Продавец:
+            </div>
+            <div class="song-data">
+              <span th:text="${owner.fullName}"></span>
+            </div>
+            <div class="song-data-label">
+              Композиция:
+            </div>
+            <div class="song-data">
+              <span th:text="${composition.author + ' - ' + composition.name}"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="login-block">
+        <div class="rent-title">
+          ПОКУПАТЕЛЬ
+        </div>
+        <div class="rent-input">
+          <div class="rent-subtitle">
+            Ваши данные:
+          </div>
+          <div class="rent-form-block">
+            <form th:action="@{/processBuy/{id}(id = ${composition.id})}" method="post"  id="buy-form">
+              <div class="rent-form-item">
+                <label for="ddd">
+                  <span class="input-holder">
+                    <output id="ddd">Полная  передача прав</output>
+                  </span>
+                </label>
+              </div>
+              <div class="rent-form-item">
+                <label for="cr-input">
+                  <span class="input-holder">
+                    <output id="cr-input">
+                      <span th:text="${currentUser.fullName}"></span>
+                    </output>
+                  </span>
+                </label>
+              </div>
+              <div class="rent-submit">
+                  <button th:if="${currentUser.id != composition.ownerId}" type="button" onclick="document.getElementById('buy-form').submit()">КУПИТЬ</button>
+                  <button th:unless="${currentUser.id != composition.ownerId}" type="button" disabled>Нельзя купить свое</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

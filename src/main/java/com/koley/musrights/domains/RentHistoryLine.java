@@ -1,12 +1,31 @@
 package com.koley.musrights.domains;
 
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+
+import javax.persistence.*;
 import java.util.Date;
 
+@Entity
+@Table(name = "RentHistory")
+@EnableAutoConfiguration
 public class RentHistoryLine {
 
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    long  id;
     long userId;
     long compositionId;
+
+    int listenCount;
     Date lineDate;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public long getUserId() {
         return userId;
@@ -30,5 +49,13 @@ public class RentHistoryLine {
 
     public void setLineDate(Date lineDate) {
         this.lineDate = lineDate;
+    }
+
+    public int getListenCount() {
+        return listenCount;
+    }
+
+    public void setListenCount(int listenCount) {
+        this.listenCount = listenCount;
     }
 }

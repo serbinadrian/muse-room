@@ -66,6 +66,8 @@ public class CompositionService {
         composition.setDurationInSeconds((int) mp3File.getLengthInSeconds());
         composition.setFormatedDuration(getFormatedDuration(composition.getDurationInSeconds()));
         composition.setFilePath(filepath);
+        composition.setAvailableToBuy(false);
+        composition.setFirstOwner(true);
 
         if (!compositionDir.exists()) {
             compositionDir.mkdirs();

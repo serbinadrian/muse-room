@@ -167,7 +167,7 @@
                     </div>
                     <div class="song-buttons">
                         <div th:if="${user}" class="button-rent" data-tooltip="Арендовать" data-flow="top">
-                            <a href="modals/rent.html" target="modal-window">
+                            <a th:href="@{/rent/{songID}(songID = ${composition.id})}" target="modal-window">
                                 <svg width="35" height="35" viewBox="0 0 35 35" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path d="M19.0566 9.74515C19.0566 10.5926 18.3687 11.2796 17.5204 11.2796C16.672 11.2796 15.9844 10.5925 15.9844 9.74515C15.9844 8.89774 16.672 8.21075 17.5204 8.21075C18.3688 8.21075 19.0566 8.89781 19.0566 9.74515Z"
@@ -216,7 +216,7 @@
                             </svg>
                         </div>
                         <div th:if="${user}" class="button-buy" data-tooltip="Купить" data-flow="top">
-                            <a href="modals/buy.html" target="modal-window">
+                            <a th:href="@{/buy/{songID}(songID = ${composition.id})}" target="modal-window">
                                 <svg width="35" height="35" viewBox="0 0 35 35" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path

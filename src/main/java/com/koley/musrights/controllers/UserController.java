@@ -3,9 +3,7 @@ package com.koley.musrights.controllers;
 import com.koley.musrights.datasets.UserAvatarColorsDataset;
 import com.koley.musrights.domains.*;
 import com.koley.musrights.misc.Role;
-import com.koley.musrights.repositories.CompositionRepository;
-import com.koley.musrights.repositories.UserAvatarsRepository;
-import com.koley.musrights.repositories.UserRepository;
+import com.koley.musrights.repositories.*;
 import com.koley.musrights.services.AdminService;
 import com.koley.musrights.services.AuthenticationService;
 import com.koley.musrights.services.PageService;
@@ -19,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -39,19 +38,27 @@ public class UserController {
     PageService<Composition> compositionPageService;
     @Autowired
     SearchAndFiltersService searchAndFiltersService;
+    @Autowired
+    BuyRepository buyRepository;
+    @Autowired
+    RentRepository rentRepository;
+    @Autowired
+    RentHistoryRepository rentHistoryRepository;
+    @Autowired
+    BuyHistoryRepository buyHistoryRepository;
     private final int compositionsPerPage = 12;
     User user = new User();
     boolean isSignedIn = false;
 
     @GetMapping("/")
-    public String getHomepage(){
+    public String getHomepage() {
         return "redirect:/home/1";
     }
 
     @GetMapping("/home/{page}")
-    public String getHomeFiltered(@PathVariable(value = "page")int page,
-                                  @RequestParam(value = "search", required = false)String search,
-                                  @RequestParam(value = "sort", required = false)String sort,
+    public String getHomeFiltered(@PathVariable(value = "page") int page,
+                                  @RequestParam(value = "search", required = false) String search,
+                                  @RequestParam(value = "sort", required = false) String sort,
                                   @RequestParam(value = "filters", required = false) Genres[] filters,
                                   Model model) {
         if (isSignedIn) {
@@ -59,13 +66,13 @@ public class UserController {
             user = userRepository.getByName(user.getName());//update admin id if refill DB
         }
         boolean isAdmin = userRepository.existsByName("admin");
-        if(!isAdmin){
+        if (!isAdmin) {
             adminService.createAdmin();
         }
 
 
-        if(!searchAndFiltersService.isSet() || page == 1 && searchAndFiltersService.isChanged(search, sort, filters)){
-            searchAndFiltersService.insertParams(search, sort, filters);
+        if (!searchAndFiltersService.isSet() || page == 1 && searchAndFiltersService.isChanged(search, sort, filters, user)) {
+            searchAndFiltersService.insertParams(user, search, sort, filters);
             searchAndFiltersService.build();
         }
 
@@ -76,13 +83,13 @@ public class UserController {
         Page<Composition> currentPage = compositionPageService.getPage(page);
         model.addAttribute("isSignedIn", isSignedIn);
 
-        if(!currentPage.isSingle()) {
+        if (!currentPage.isSingle()) {
             model.addAttribute("labels", currentPage.getLabels());
         }
-        if(!currentPage.isNull()) {
+        if (!currentPage.isNull()) {
             model.addAttribute("compositions", currentPage.getElements());
         }
-        model.addAttribute("genres",  new ArrayList<>(EnumSet.allOf(Genres.class)));
+        model.addAttribute("genres", new ArrayList<>(EnumSet.allOf(Genres.class)));
         model.addAttribute("search", search);
         model.addAttribute("sort", searchAndFiltersService.getSort());
         model.addAttribute("filters", searchAndFiltersService.getFilters());
@@ -91,28 +98,201 @@ public class UserController {
         return "index";
     }
 
-    @GetMapping("/userpage/{username}")
-    public String getUserpage(Model model, @PathVariable (value = "username") String username){
-        if (isSignedIn && username.equals(user.getName())) {
-            if(username.equals("admin")){
-                user = userRepository.getByName("admin");
+    @GetMapping("/stopRent/{id}")
+    public  String stopRent(@PathVariable(value = "id")long id,
+                            Model model){
+
+        UserRent crent =  rentRepository.getByUserIdAndCompositionId(user.getId(), id);
+        rentRepository.deleteById(crent.getId());
+        List<Composition> compositions = compositionRepository.findAllByOwnerId(user.getId());
+        List<UserRent> rents = rentRepository.findAllByUserId(user.getId());
+        List<Composition> ownCompositions = new ArrayList<>();
+        List<Composition> rentCompositions  = new ArrayList<>();
+        List<Composition> boughtCompositions = new ArrayList<>();
+        for(Composition composition : compositions){
+            if(composition.isFirstOwner()){
+                ownCompositions.add(composition);
             }
-            List<Composition> compositions = compositionRepository.findAllByOwnerId(user.getId());
-            int uploadedListSize = compositions.size();
-            model.addAttribute("ownMusic", compositions);
-            model.addAttribute("uploadedMusicCount", uploadedListSize);
-            model.addAttribute("user", user);
-            model.addAttribute("isSignedIn", isSignedIn);
-            model.addAttribute("username", username);
-            model.addAttribute("userAvatar", userAvatarsRepository.getByUserId(user.getId()));
+            else boughtCompositions.add(composition);
         }
-        else{
-            return "redirect:/signin";
+        for (UserRent rent : rents){
+            Composition composition = compositionRepository.getById(rent.getCompositionId());
+            rentCompositions.add(composition);
         }
-        if(username.equals("admin")){
+        model.addAttribute("ownMusic", ownCompositions);
+        model.addAttribute("uploadedMusicCount", ownCompositions.size());
+        model.addAttribute("boughtMusicCount", boughtCompositions.size());
+        model.addAttribute("rentMusicCount", rentCompositions.size());
+        model.addAttribute("user", user);
+        model.addAttribute("isSignedIn", isSignedIn);
+        model.addAttribute("username", user.getName());
+        model.addAttribute("rents", rentCompositions);
+        model.addAttribute("buying", boughtCompositions);
+        model.addAttribute("userAvatar", userAvatarsRepository.getByUserId(user.getId()));
+        if (user.getName().equals("admin")) {
             return "admin";
         }
         return "userpage";
+    }
+
+    @GetMapping("/editComposition/{id}")
+    public  String getEditPage(@PathVariable(value = "id")long id,
+                               Model model){
+        Composition composition = compositionRepository.getById(id);
+        List<Genres>  genres = new ArrayList<>(EnumSet.allOf(Genres.class));
+        Genres currentGenre = null;
+        int index = 0;
+        for(Genres genre  : genres){
+            if(composition.getGenre().equals(genre)){
+                currentGenre = genres.get(index);
+                genres.remove(index);
+                break;
+            }
+            index++;
+        }
+        model.addAttribute("composition",  composition);
+        model.addAttribute("genres", genres);
+        if(currentGenre !=  null){
+            model.addAttribute("currentGenre", currentGenre);
+        }
+        return "editComposition";
+    }
+
+    @GetMapping("/userpage/{username}")
+    public String getUserpage(Model model, @PathVariable(value = "username") String username) {
+        if (isSignedIn && username.equals(user.getName())) {
+            if (username.equals("admin")) {
+                user = userRepository.getByName("admin");
+            }
+            List<Composition> compositions = compositionRepository.findAllByOwnerId(user.getId());
+            List<UserRent> rents = rentRepository.findAllByUserId(user.getId());
+            List<Composition> ownCompositions = new ArrayList<>();
+            List<Composition> rentCompositions  = new ArrayList<>();
+            List<Composition> boughtCompositions = new ArrayList<>();
+            for(Composition composition : compositions){
+                if(composition.isFirstOwner()){
+                    ownCompositions.add(composition);
+                }
+                else boughtCompositions.add(composition);
+            }
+            for (UserRent rent : rents){
+                Composition composition = compositionRepository.getById(rent.getCompositionId());
+                rentCompositions.add(composition);
+            }
+
+            model.addAttribute("ownMusic", ownCompositions);
+            model.addAttribute("uploadedMusicCount", ownCompositions.size());
+            model.addAttribute("boughtMusicCount", boughtCompositions.size());
+            model.addAttribute("rentMusicCount", rentCompositions.size());
+            model.addAttribute("user", user);
+            model.addAttribute("isSignedIn", isSignedIn);
+            model.addAttribute("username", username);
+            model.addAttribute("rents", rentCompositions);
+            model.addAttribute("buying", boughtCompositions);
+            model.addAttribute("userAvatar", userAvatarsRepository.getByUserId(user.getId()));
+        } else {
+            return "redirect:/signin";
+        }
+        if (username.equals("admin")) {
+            return "admin";
+        }
+        return "userpage";
+    }
+
+    @GetMapping("rent/{songID}")
+    public String getRentPage(@PathVariable(value = "songID") long songID,
+                              Model model) {
+        Composition composition = compositionRepository.getById(songID);
+        model.addAttribute("composition", composition);
+        model.addAttribute("owner", userRepository.getById(composition.getOwnerId()));
+        model.addAttribute("currentUser", user);
+        return "rent";
+    }
+
+    @GetMapping("buy/{songID}")
+    public String getBuyPage(@PathVariable(value = "songID") long songID,
+                             Model model) {
+        Composition composition = compositionRepository.getById(songID);
+        model.addAttribute("composition", composition);
+        model.addAttribute("owner", userRepository.getById(composition.getOwnerId()));
+        model.addAttribute("currentUser", user);
+        return "buy";
+    }
+
+    @PostMapping("processRent/{songID}")
+    public String processRent(@PathVariable(value = "songID") long songID,
+                              @RequestParam(value = "listenCount") String lcount,
+                              Model model) {
+
+        lcount = lcount.replace(",", "");
+        int count = Integer.parseInt(lcount.replace("прослушиваний",  "").trim());
+
+        Composition composition = compositionRepository.getById(songID);
+        UserRent rent;
+        if(rentRepository.existsByCompositionIdAndUserId(songID, user.getId())){
+            rent = rentRepository.getByUserIdAndCompositionId(user.getId(), songID);
+            rent.setListenCount(rent.getListenCount() + count);
+        }
+        else{
+            rent = new UserRent();
+            rent.setListenCount(count);
+        }
+        rent.setRentDate(new Date());
+        rent.setUserId(user.getId());
+        rent.setCompositionId(composition.getId());
+
+        RentHistoryLine rentHistoryLine = new RentHistoryLine();
+        rentHistoryLine.setLineDate(rent.getRentDate());
+        rentHistoryLine.setUserId(rent.getUserId());
+        rentHistoryLine.setCompositionId(rent.getCompositionId());
+        rentHistoryLine.setListenCount(rent.getListenCount());
+        composition.setRentTimes(composition.getRentTimes() + 1);
+        user.setActions(user.getActions() + 1);
+        userRepository.save(user);
+        compositionRepository.save(composition);
+        rentRepository.save(rent);
+        rentHistoryRepository.save(rentHistoryLine);
+
+        model.addAttribute("composition", composition);
+        model.addAttribute("listenCount", count);
+        model.addAttribute("currentUser", user);
+        return "successfulRent";
+    }
+
+    @PostMapping("processBuy/{songID}")
+    public String processBuy(@PathVariable(value = "songID") long songID,
+                              Model model) {
+        Composition composition = compositionRepository.getById(songID);
+        UserBuying buying;
+        if(buyRepository.existsByCompositionId(composition.getId())){
+            buying = buyRepository.getByCompositionId(composition.getId());
+            buying.setBuyingDate(new Date());
+            buying.setUserId(user.getId());
+        }else {
+            buying =  new UserBuying();
+            buying.setBuyingDate(new Date());
+            buying.setUserId(user.getId());
+            buying.setCompositionId(composition.getId());
+        }
+        composition.setOwnerId(user.getId());
+        composition.setAvailableToBuy(false);
+        composition.setBuyTimes(composition.getBuyTimes() + 1);
+        compositionRepository.save(composition);
+        buyRepository.save(buying);
+
+        BuyingHistoryLine  buyingHistoryLine = new BuyingHistoryLine();
+        buyingHistoryLine.setUserId(buying.getUserId());
+        buyingHistoryLine.setCompositionId(buying.getCompositionId());
+        buyingHistoryLine.setLineDate(buying.getBuyingDate());
+        buyHistoryRepository.save(buyingHistoryLine);
+        user.setActions(user.getActions() + 1);
+        userRepository.save(user);
+        //stop  all rent due to  new buy
+        //rentRepository.deleteAllByCompositionId(composition.getId());
+
+        model.addAttribute("composition", composition);
+        model.addAttribute("currentUser", user);
+        return "successfulBuy";
     }
 
     @GetMapping("/signin")
@@ -138,6 +318,10 @@ public class UserController {
             isSignedIn = true;
             return "redirect:/";
         } else {
+            for (ErrorMessage error : errors) {
+                model.addAttribute(error.getType().getTemplateValue(), error);
+                error.print();
+            }
             isSignedIn = false;
             model.addAttribute("username", username);
         }
@@ -166,7 +350,7 @@ public class UserController {
             user.setRole(Role.USER);
             UserAvatarColorsDataset colorsDataset = new UserAvatarColorsDataset();
             int size = colorsDataset.size;
-            int index = (int)Math.floor(Math.random()*(size+1));
+            int index = (int) Math.floor(Math.random() * (size + 1));
             UserAvatar avatar = adminService.createUserAvatar(user, colorsDataset.userColors.get(index), colorsDataset.userSecondaryColors.get(index));
             userRepository.save(user);
             userAvatarsRepository.save(avatar);
@@ -178,7 +362,7 @@ public class UserController {
                 model.addAttribute(error.getType().getTemplateValue(), error);
                 error.print();
             }
-            model.addAttribute("invalid_authentication",  "есть ошибки в регистрации");
+            model.addAttribute("invalid_authentication", "есть ошибки в регистрации");
             model.addAttribute("username", username);
             model.addAttribute("name", name);
             model.addAttribute("email", email);

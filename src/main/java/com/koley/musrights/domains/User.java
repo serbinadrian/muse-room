@@ -18,6 +18,8 @@ public class User {
     private String fullName;
     private Role role;
 
+    private int actions = 0;
+
     public String getPassword() {
         return password;
     }
@@ -64,5 +66,13 @@ public class User {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public int getActions() {
+        return actions;
+    }
+
+    public void setActions(int actions) {
+        this.actions = actions;
     }
 }

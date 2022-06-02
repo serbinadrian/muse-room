@@ -133,6 +133,7 @@ public class AdminService {
             Composition composition = musicDataset.compositions.get(compositionNumber);
             composition.setFake(true);
             composition.setOwnerId(user.getId());
+            composition.setFirstOwner(true);
             if (!compositionRepository.existsByNameAndAuthor(composition.getName(), composition.getAuthor())) {
                 compositionRepository.save(composition);
             }

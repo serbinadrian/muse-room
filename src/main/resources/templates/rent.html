@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>HOME</title>
+  <link rel="stylesheet" href="/static/style/root.css">
+  <link rel="stylesheet" href="/static/style/reset.css">
+  <link rel="stylesheet" href="/static/style/rent.css">
+  <link rel="stylesheet" href="/static/style/tooltip.css">
+</head>
+
+<body>
+  <div class="center-container">
+    <div class="rent-block">
+      <div class="blank-bakground">
+        <div class="blank-background-body">
+          <div class="rent-navigation">
+            <a class="rent-navigation-item rent-sign-in active" th:href="@{/rent/{songID}(songID = ${composition.id})}">
+              АРЕНДА
+            </a>
+            <a class="rent-navigation-item rent-sign-up" th:href="@{/buy/{songID}(songID = ${composition.id})}">
+              ПОКУПКА
+            </a>
+          </div>
+          <div class="song-data-block">
+            <div class="song-data-label">
+              Арендодатель:
+            </div>
+            <div class="song-data">
+              <span th:text="${owner.fullName}"></span>
+            </div>
+            <div class="song-data-label">
+              Композиция:
+            </div>
+            <div class="song-data">
+              <span th:text="${composition.author + ' - ' + composition.name}"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="login-block">
+        <div class="rent-title">
+          АРЕНДАТОР
+        </div>
+        <div class="rent-input">
+          <div class="rent-subtitle">
+            Ваши данные:
+          </div>
+          <div class="rent-form-block">
+            <form th:action="@{/processRent/{id}(id = ${composition.id})}" method="post"  id="rent-form">
+              <div class="rent-form-item listenCount" >
+                <label for="listenCount">
+                  <span class="input-holder">
+                    <input type="text" placeholder="Количество прослушиваний" id="listenCount" name="listenCount"  value="1000">
+                  </span>
+                </label>
+                <div class="count-control-buttons">
+                  <div class="count-control-button add" id="add">
+                    <svg width="10" height="5" viewBox="0 0 15 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M8.20711 0.792893C7.81658 0.402369 7.18342 0.402369 6.79289 0.792893L0.428932 7.15685C0.0384079 7.54738 0.0384079 8.18054 0.428932 8.57107C0.819456 8.96159 1.45262 8.96159 1.84315 8.57107L7.5 2.91421L13.1569 8.57107C13.5474 8.96159 14.1805 8.96159 14.5711 8.57107C14.9616 8.18054 14.9616 7.54738 14.5711 7.15685L8.20711 0.792893ZM8.5 2.5V1.5H6.5V2.5H8.5Z" fill="black"/>
+                    </svg>
+                  </div>
+                  <div class="count-control-button sub" id="sub">
+                    <svg width="10" height="5" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M7.29289 8.70711C7.68342 9.09763 8.31658 9.09763 8.70711 8.70711L15.0711 2.34315C15.4616 1.95262 15.4616 1.31946 15.0711 0.928932C14.6805 0.538408 14.0474 0.538408 13.6569 0.928932L8 6.58579L2.34315 0.928932C1.95262 0.538408 1.31946 0.538408 0.928932 0.928932C0.538408 1.31946 0.538408 1.95262 0.928932 2.34315L7.29289 8.70711ZM7 7V8H9V7H7Z" fill="black"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <div class="rent-form-item">
+                <label for="user-input">
+                  <span class="input-holder">
+                    <output id="user-input">
+                      <span th:text="${currentUser.fullName}"></span>
+                    </output>
+                  </span>
+                </label>
+              </div>
+              <div class="rent-submit">
+                <button th:if="${currentUser.id != composition.ownerId}" type="button" onclick="document.getElementById('rent-form').submit()">АРЕНДОВАТЬ</button>
+                <button th:unless="${currentUser.id != composition.ownerId}" type="button" disabled>Нельзя арендовать свое</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <script src="/static/script/modals/rent.js"></script>
+</body>
+
+</html>

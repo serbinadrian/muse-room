@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>HOME</title>
+    <link rel="stylesheet" href="/static/style/root.css">
+    <link rel="stylesheet" href="/static/style/reset.css">
+    <link rel="stylesheet" href="/static/style/rent.css">
+    <link rel="stylesheet" href="/static/style/tooltip.css">
+</head>
+
+<body>
+<div class="center-container">
+    <div class="rent-block">
+        <div class="blank-bakground">
+            <div class="blank-background-body">
+            </div>
+        </div>
+        <div class="login-block">
+            <div class="rent-title">
+                УСПЕШНАЯ ПОКУПКА
+            </div>
+            <div class="rent-input">
+                <div class="rent-form-block">
+                    <div class="rent-form-item">
+                        <label for="aaa">
+                          <span class="input-holder">
+                            <output id="aaa">
+                                 <span th:text="${composition.author + ' - ' + composition.name}"></span>
+                            </output>
+                          </span>
+                        </label>
+                    </div>
+                    <div class="rent-form-item">
+                        <label for="ddd">
+                          <span class="input-holder">
+                            <output id="ddd">
+                                Полная передача прав
+                            </output>
+                          </span>
+                        </label>
+                    </div>
+                    <div class="rent-form-item">
+                        <label for="cr-input">
+                              <span class="input-holder">
+                                <output id="cr-input">
+                                  <span th:text="${currentUser.fullName}"></span>
+                                </output>
+                              </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
